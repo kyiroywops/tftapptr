@@ -20,16 +20,28 @@ class MatchMetadata {
   });
 }
 
+// class MatchInfo {
+//   final DateTime gameDateTime;
+//   final double gameLength;
+//   final String gameVersion;
+//   final List<ParticipantInfo> participants;
+
+//   MatchInfo({
+//     required this.gameDateTime,
+//     required this.gameLength,
+//     required this.gameVersion,
+//     required this.participants,
+//   });
+// }
+
 class MatchInfo {
-  final DateTime gameDateTime;
-  final double gameLength;
-  final String gameVersion;
+  final String dataVersion;
+  final String matchId;
   final List<ParticipantInfo> participants;
 
   MatchInfo({
-    required this.gameDateTime,
-    required this.gameLength,
-    required this.gameVersion,
+    required this.dataVersion,
+    required this.matchId,
     required this.participants,
   });
 }
@@ -63,6 +75,9 @@ class ParticipantInfo {
     required this.units,
   });
 }
+
+// Las clases CompanionInfo, TraitInfo y UnitInfo deben seguir como las definiste anteriormente.
+
 
 class CompanionInfo {
   final String contentId;
