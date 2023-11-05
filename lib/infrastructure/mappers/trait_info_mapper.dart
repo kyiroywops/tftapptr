@@ -1,5 +1,6 @@
-import 'package:flutt_muvi/infrastructure/models/tft/match/trait_info_model.dart';
-import 'package:flutt_muvi/domain/entities/tft/match/trait_info.dart';
+
+import 'package:tftapp/domain/entities/match_details_entities.dart';
+import 'package:tftapp/infrastructure/models/trait_info_model.dart';
 
 class TraitInfoMapper {
   static TraitInfo entityFromModel(TraitInfoModel model) {

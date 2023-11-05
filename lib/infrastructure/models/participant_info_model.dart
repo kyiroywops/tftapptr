@@ -1,6 +1,7 @@
-import 'package:flutt_muvi/infrastructure/models/tft/match/companion_info_model.dart';
-import 'package:flutt_muvi/infrastructure/models/tft/match/trait_info_model.dart';
-import 'package:flutt_muvi/infrastructure/models/tft/match/unit_info_model.dart';
+
+import 'package:tftapp/infrastructure/models/companion_info_model.dart';
+import 'package:tftapp/infrastructure/models/trait_info_model.dart';
+import 'package:tftapp/infrastructure/models/unit_info_model.dart';
 
 class ParticipantInfoModel {
   final List<String> augments;

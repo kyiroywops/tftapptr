@@ -1,8 +1,9 @@
-import 'package:flutt_muvi/infrastructure/models/tft/match/participant_info_model.dart';
-import 'package:flutt_muvi/domain/entities/tft/match/participant_info.dart';
-import 'package:flutt_muvi/infrastructure/mappers/tft/match/companion_info_mapper.dart';
-import 'package:flutt_muvi/infrastructure/mappers/tft/match/trait_info_mapper.dart';
-import 'package:flutt_muvi/infrastructure/mappers/tft/match/unit_info_mapper.dart';
+
+import 'package:tftapp/domain/entities/match_details_entities.dart';
+import 'package:tftapp/infrastructure/mappers/companion_info_mapper.dart';
+import 'package:tftapp/infrastructure/mappers/trait_info_mapper.dart';
+import 'package:tftapp/infrastructure/mappers/unit_info_mapper.dart';
+import 'package:tftapp/infrastructure/models/participant_info_model.dart';
 
 class ParticipantInfoMapper {
   static ParticipantInfo entityFromModel(ParticipantInfoModel model) {

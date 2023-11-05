@@ -1,5 +1,6 @@
-import 'package:flutt_muvi/infrastructure/models/tft/match/companion_info_model.dart';
-import 'package:flutt_muvi/domain/entities/tft/match/companion_info.dart';
+
+import 'package:tftapp/domain/entities/match_details_entities.dart';
+import 'package:tftapp/infrastructure/models/companion_info_model.dart';
 
 class CompanionInfoMapper {
   static CompanionInfo entityFromModel(CompanionInfoModel model) {
