@@ -7,7 +7,7 @@ class TFTMatchDataSource {
     BaseOptions(
       baseUrl: 'https://api.riotgames.com/tft/match/v1/',
       headers: {
-        'X-Riot-Token': Enviroment.riotApiKey, // Reemplaza con tu propia API key
+        'X-Riot-Token': Environment.riotApiKey, // Reemplaza con tu propia API key
       },
     ),
   );
