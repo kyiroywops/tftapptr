@@ -15,7 +15,7 @@ class TFTMatchRepository {
 
     for (final matchId in matchIds) {
       final matchDetail = await _dataSource.getMatchDetailsById(matchId, region);
-      matchDetails.add(matchDetail);
+      matchDetails.add(matchDetail); 
     }
 
     return matchDetails;

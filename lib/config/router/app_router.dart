@@ -9,8 +9,19 @@ final appRouter = GoRouter(
   routes: [
     GoRoute(
       path: '/',
-      name: HomeScreenProPlayers.name,
       builder: (context, state) => const HomeScreenProPlayers(),
+    ),
+    GoRoute(
+      path: '/patch_notes',
+      builder: (context, state) => const PatchNotesScreen(),
+    ),
+    GoRoute(
+      path: '/search_players',
+      builder: (context, state) => const SearchPlayersScreen(),
+    ),
+    GoRoute(
+      path: '/compositions',
+      builder: (context, state) => const CompositionsScreen(),
     ),
   ],
 );
