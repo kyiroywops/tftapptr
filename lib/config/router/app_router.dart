@@ -1,5 +1,5 @@
 import "package:go_router/go_router.dart";
-import "package:tftapp/presentation/screens/proplayers/home_screen_proplayers.dart";
+import 'package:tftapp/presentation/screens/proplayers/ProPlayersScreen.dart';
 
 
 
