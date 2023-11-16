@@ -3,21 +3,36 @@ import 'package:tftapp/config/constants/environment.dart';
 import 'package:tftapp/infrastructure/models/match_info_model.dart';
 
 class TFTMatchDataSource {
-  final Dio _dio = Dio(
-    BaseOptions(
-      baseUrl: 'https://api.riotgames.com/tft/match/v1/',
-      headers: {
-        'X-Riot-Token': Environment.riotApiKey, 
-      },
-    ),
-  );
+  final Dio _dio;
 
-  Future<List<String>> getMatchIdsByPUUID(String puuid, String region) async {
+  TFTMatchDataSource(String region)
+      : _dio = Dio(
+          BaseOptions(
+            baseUrl: _getBaseUrl(region),
+            headers: {
+              'X-Riot-Token': Environment.riotApiKey,
+            },
+          ),
+        );
+
+  static String _getBaseUrl(String region) {
+    switch (region.toLowerCase()) {
+      case 'americas':
+        return 'https://americas.api.riotgames.com/tft/match/v1/';
+      case 'asia':
+        return 'https://asia.api.riotgames.com/tft/match/v1/';
+      case 'europe':
+        return 'https://europe.api.riotgames.com/tft/match/v1/';
+      default:
+        throw Exception('Unsupported region');
+    }
+  }
+
+  Future<List<String>> getMatchIdsByPUUID(String puuid) async {
     try {
-      final response = await _dio.get('matches/by-puuid/$puuid/ids?region=$region');
+      final response = await _dio.get('matches/by-puuid/$puuid/ids?start=0&count=20');
       if (response.statusCode == 200) {
-        final List<String> matchIds = List<String>.from(response.data);
-        return matchIds;
+        return List<String>.from(response.data);
       }
       throw Exception('Failed to fetch match IDs');
     } catch (e) {
@@ -25,12 +40,11 @@ class TFTMatchDataSource {
     }
   }
 
-  Future<MatchInfoModel> getMatchDetailsById(String matchId, String region) async {
+  Future<MatchInfoModel> getMatchDetailsById(String matchId) async {
     try {
-      final response = await _dio.get('matches/$matchId?region=$region');
+      final response = await _dio.get('matches/$matchId');
       if (response.statusCode == 200) {
-        final MatchInfoModel matchDetails = MatchInfoModel.fromJson(response.data);
-        return matchDetails;
+        return MatchInfoModel.fromJson(response.data);
       }
       throw Exception('Failed to fetch match details');
     } catch (e) {

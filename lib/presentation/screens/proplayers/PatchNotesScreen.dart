@@ -5,9 +5,9 @@ class PatchNotesScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Patch Notes'),
+        title: const Text('Patch Notes'),
       ),
-      body: Center(
+      body: const Center(
         child: Text('Contenido de Patch Notes aquí'),
       ),
     );

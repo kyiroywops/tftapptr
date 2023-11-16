@@ -5,9 +5,9 @@ class SearchPlayersScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Buscar Jugadores'),
+        title: const Text('Buscar Jugadores'),
       ),
-      body: Center(
+      body: const Center(
         child: Text('Contenido de Buscar Jugadores aquí'),
       ),
     );
