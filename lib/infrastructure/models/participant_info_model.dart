@@ -32,38 +32,24 @@ class ParticipantInfoModel {
   });
 
   factory ParticipantInfoModel.fromJson(Map<String, dynamic> json) {
-
-
-    print('Deserializando ParticipantInfoModel con JSON: $json'); // Imprime el JSON completo
-
-    final List<dynamic>? augmentsList = json['augments'] as List?;
-    final List<String> augments = augmentsList?.map((e) => e as String).toList() ?? [];
-    print('Lista de augments después de la deserialización: $augments'); // Imprime la lista de augments
-
-    final List<dynamic>? traitsList = json['traits'] as List?;
-    final List<TraitInfoModel> traits = traitsList?.map((e) => TraitInfoModel.fromJson(e as Map<String, dynamic>)).toList() ?? [];
-    print('Lista de traits después de la deserialización: $traits'); // Imprime la lista de traits
-
-    final List<dynamic>? unitsList = json['units'] as List?;
-    final List<UnitInfoModel> units = unitsList?.map((e) => UnitInfoModel.fromJson(e as Map<String, dynamic>)).toList() ?? [];
-    print('Lista de units después de la deserialización: $units'); // Imprime la lista de units
-
-    // Asegúrate de manejar todos los campos potencialmente nulos con el mismo patrón
-    // Si algún campo puede ser nulo y no es una lista, asegúrate de proporcionar un valor por defecto 
-
+    // Deserialización con manejo de valores nulos para enteros
     return ParticipantInfoModel(
-      augments: augments,
-      companion: CompanionInfoModel.fromJson(json['companion'] ?? {}),
-      goldLeft: json['goldLeft'] ?? 0,
-      lastRound: json['lastRound'] ?? 0,
-      level: json['level'] ?? 0,
-      placement: json['placement'] ?? 0,
-      playersEliminated: json['playersEliminated'] ?? 0,
+      augments: (json['augments'] as List<dynamic>?)?.map((e) => e as String).toList() ?? [],
+      companion: CompanionInfoModel.fromJson(json['companion']),
+      goldLeft: json['goldLeft'] as int? ?? 0,
+      lastRound: json['lastRound'] as int? ?? 0,
+      level: json['level'] as int? ?? 0,
+      placement: json['placement'] as int? ?? 0,
+      playersEliminated: json['playersEliminated'] as int? ?? 0,
       puuid: json['puuid'] ?? '',
       timeEliminated: (json['timeEliminated'] as num?)?.toDouble() ?? 0.0,
-      totalDamageToPlayers: json['totalDamageToPlayers'] ?? 0,
-      traits: traits,
-      units: units,
+      totalDamageToPlayers: json['totalDamageToPlayers'] as int? ?? 0,
+      traits: (json['traits'] as List<dynamic>?)
+          ?.map((e) => TraitInfoModel.fromJson(e as Map<String, dynamic>))
+          .toList() ?? [],
+      units: (json['units'] as List<dynamic>?)
+          ?.map((e) => UnitInfoModel.fromJson(e as Map<String, dynamic>))
+          .toList() ?? [],
     );
   }
 }

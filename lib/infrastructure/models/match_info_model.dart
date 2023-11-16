@@ -12,14 +12,17 @@ class MatchInfoModel {
   });
 
   factory MatchInfoModel.fromJson(Map<String, dynamic> json) {
-    final List<dynamic> participantsJson = json['participants'] as List<dynamic>? ?? [];
-    final List<ParticipantInfoModel> participants = participantsJson
+    final dataVersion = json['metadata']['data_version'] as String? ?? 'Unknown';
+    final matchId = json['metadata']['match_id'] as String? ?? 'Unknown';
+    final participantsJson = json['info']['participants'] as List<dynamic>? ?? [];
+
+    final participants = participantsJson
         .map((e) => ParticipantInfoModel.fromJson(e as Map<String, dynamic>))
         .toList();
 
     return MatchInfoModel(
-      dataVersion: json['dataVersion'] as String? ?? 'Unknown',
-      matchId: json['matchId'] as String? ?? 'Unknown',
+      dataVersion: dataVersion,
+      matchId: matchId,
       participants: participants,
     );
   }

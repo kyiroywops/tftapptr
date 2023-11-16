@@ -14,12 +14,13 @@ class UnitInfoModel {
   });
 
   factory UnitInfoModel.fromJson(Map<String, dynamic> json) {
+    // Manejo de valores nulos y listas que pueden venir como nulas
     return UnitInfoModel(
-      characterId: json['characterId'],
-      itemNames: List<String>.from(json['itemNames']),
-      name: json['name'],
-      rarity: json['rarity'],
-      tier: json['tier'],
+      characterId: json['characterId'] as String? ?? 'default_character_id',
+      itemNames: (json['itemNames'] as List<dynamic>?)?.map((e) => e as String).toList() ?? [],
+      name: json['name'] as String? ?? 'default_name',
+      rarity: json['rarity'] as int? ?? 0, // Asumiendo que 0 es un valor por defecto aceptable
+      tier: json['tier'] as int? ?? 0, // Asumiendo que 0 es un valor por defecto aceptable
     );
   }
 }
