@@ -1,8 +1,8 @@
+// Tu archivo ProPlayersScreen.dart
+
 import 'package:flutter/material.dart';
 import 'package:tftapp/infrastructure/datasources/tft_match_datasource.dart';
 import 'package:tftapp/infrastructure/models/match_info_model.dart';
-import 'package:tftapp/presentation/screens/proplayers/unit_info_model.dart';
-import 'package:collection/collection.dart'; // Importar collection para usar firstWhereOrNull
 
 class ProPlayersScreen extends StatefulWidget {
   @override
@@ -14,8 +14,6 @@ class _ProPlayersScreenState extends State<ProPlayersScreen> {
   List<MatchInfoModel> _matches = [];
   bool _isLoading = true;
   String _errorMessage = '';
-  // Definimos el puuid aquí para que sea accesible en todo el ámbito de la clase.
-  final String puuid = '9wtqe0_9jqnAzHb-NzMeHQ0CQADVq0GQsS-F_2nU_ZEiO4QhjhXPKRTLppRTza9S1927K-eONC5IGQ';
 
   @override
   void initState() {
@@ -25,19 +23,26 @@ class _ProPlayersScreenState extends State<ProPlayersScreen> {
 
   Future<void> _fetchMatches() async {
     setState(() {
-      _isLoading = true;
+      _isLoading = true;  // Asegúrate de que el indicador de carga se muestra al iniciar la carga
     });
 
+    print('Fetching matches for a pro player...');
     try {
+      // Usar el PUUID que proporcionaste
+      final puuid = '9wtqe0_9jqnAzHb-NzMeHQ0CQADVq0GQsS-F_2nU_ZEiO4QhjhXPKRTLppRTza9S1927K-eONC5IGQ';
       final matchIds = await _dataSource.getMatchIdsByPUUID(puuid);
+      print('Match IDs fetched: $matchIds');
+
       final matchDetailsFutures = matchIds.map(_dataSource.getMatchDetailsById);
       final matches = await Future.wait(matchDetailsFutures);
+      print('Match details fetched for all matches');
 
       setState(() {
         _matches = matches;
         _isLoading = false;
       });
     } catch (e) {
+      print('An error occurred while fetching matches: $e');
       setState(() {
         _errorMessage = e.toString();
         _isLoading = false;
@@ -57,21 +62,11 @@ class _ProPlayersScreenState extends State<ProPlayersScreen> {
                   itemCount: _matches.length,
                   itemBuilder: (context, index) {
                     final match = _matches[index];
-                    final protagonist = match.participants.firstWhereOrNull(
-                      (p) => p.puuid == puuid,
-                    );
-
-                    if (protagonist == null) {
-                      return ListTile(
-                        title: Text('Match ID: ${match.matchId}'),
-                        subtitle: Text('Protagonist not found'),
-                      );
-                    }
-
+                    // Aquí construyes los widgets que muestran la información de cada partida
                     return ListTile(
                       title: Text('Match ID: ${match.matchId}'),
                       subtitle: Text('Data Version: ${match.dataVersion}'),
-                      trailing: UnitsRowWidget(units: protagonist.units), // Asume que esta es la definición correcta para UnitsRowWidget
+                      // Añade más información de la partida como prefieras
                     );
                   },
                 ),
