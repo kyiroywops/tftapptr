@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:tftapp/infrastructure/datasources/tft_match_datasource.dart';
 import 'package:tftapp/infrastructure/models/match_info_model.dart';
-import 'package:tftapp/presentation/screens/proplayers/unit_info_model.dart';
-import 'package:collection/collection.dart'; // Importar collection para usar firstWhereOrNull
+import 'package:tftapp/infrastructure/models/participant_info_model.dart';
+import 'package:tftapp/infrastructure/models/unit_info_model.dart';
+import 'package:collection/collection.dart';
 
 class ProPlayersScreen extends StatefulWidget {
   @override
@@ -14,7 +15,6 @@ class _ProPlayersScreenState extends State<ProPlayersScreen> {
   List<MatchInfoModel> _matches = [];
   bool _isLoading = true;
   String _errorMessage = '';
-  // Definimos el puuid aquí para que sea accesible en todo el ámbito de la clase.
   final String puuid = '9wtqe0_9jqnAzHb-NzMeHQ0CQADVq0GQsS-F_2nU_ZEiO4QhjhXPKRTLppRTza9S1927K-eONC5IGQ';
 
   @override
@@ -24,19 +24,39 @@ class _ProPlayersScreenState extends State<ProPlayersScreen> {
   }
 
   Future<void> _fetchMatches() async {
-    setState(() {
-      _isLoading = true;
-    });
-
     try {
       final matchIds = await _dataSource.getMatchIdsByPUUID(puuid);
       final matchDetailsFutures = matchIds.map(_dataSource.getMatchDetailsById);
       final matches = await Future.wait(matchDetailsFutures);
 
+      // Imprimir nombres de las unidades en la consola para debugging
+      for (var match in _matches) {
+        final protagonist = match.participants.firstWhereOrNull((p) => p.puuid == puuid);
+        if (protagonist != null) {
+          print('Units for match ${match.matchId}:');
+          protagonist.units.forEach((unit) {
+            // Suponiendo que `unit.characterId` es el nombre del campeón.
+            print(unit.characterId); 
+          });
+        }
+      }
+
       setState(() {
         _matches = matches;
         _isLoading = false;
       });
+
+      // Imprimir nombres de unidades de los protagonistas en la consola
+      for (var match in _matches) {
+        final protagonist = match.participants.firstWhereOrNull((p) => p.puuid == puuid);
+        if (protagonist != null) {
+          print('Units for match ${match.matchId}:');
+          protagonist.units.forEach((unit) {
+            print(unit.characterId); // Imprimir el ID del personaje, que asumimos es el nombre
+          });
+        }
+      }
+
     } catch (e) {
       setState(() {
         _errorMessage = e.toString();
@@ -68,10 +88,19 @@ class _ProPlayersScreenState extends State<ProPlayersScreen> {
                       );
                     }
 
+                    // Mostrar nombres de unidades en la UI
                     return ListTile(
                       title: Text('Match ID: ${match.matchId}'),
-                      subtitle: Text('Data Version: ${match.dataVersion}'),
-                      trailing: UnitsRowWidget(units: protagonist.units), // Asume que esta es la definición correcta para UnitsRowWidget
+                      subtitle: Wrap(
+                        children: protagonist.units
+                            .map((unit) => Padding(
+                                  padding: const EdgeInsets.all(2.0),
+                                  child: Chip(
+                                    label: Text(unit.characterId), // Mostrar el ID del personaje como el nombre
+                                  ),
+                                ))
+                            .toList(),
+                      ),
                     );
                   },
                 ),
