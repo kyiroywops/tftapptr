@@ -32,6 +32,8 @@ class TFTMatchDataSource {
   }
 
   Future<List<String>> getMatchIdsByPUUID(String puuid, {int retryCount = 0}) async {
+      print('getMatchIdsByPUUID called with puuid: $puuid');
+
     try {
       final response = await _dio.get('matches/by-puuid/$puuid/ids?start=0&count=5');
       if (response.statusCode == 200) {
@@ -59,25 +61,18 @@ class TFTMatchDataSource {
   }
 
   Future<MatchInfoModel> getMatchDetailsById(String matchId, {int retryCount = 0}) async {
-    try {
-      final response = await _dio.get('matches/$matchId');
-      if (response.statusCode == 200) {
-        return MatchInfoModel.fromJson(response.data);
-      } else {
-        print('Error fetching match details: ${response.statusCode} - ${response.data}');
-        throw Exception('Failed to fetch match details');
-      }
-    } on DioException catch (e) {
-      if (e.response?.statusCode == 429 && retryCount < maxRetries) {
-        print('Rate limit exceeded. Waiting 5 seconds before retrying...');
-        await Future.delayed(Duration(seconds: 5)); // Espera más tiempo antes de reintentar
-        return getMatchDetailsById(matchId, retryCount: retryCount + 1); // Incrementa el contador de reintentos
-      } else {
-        print('DioError: ${e.response?.statusCode} - ${e.response?.data}');
-        throw Exception('Error: $e');
-      }
-    }
+  print('Fetching details for match: $matchId');
+  final response = await _dio.get('matches/$matchId');
+  if (response.statusCode == 200) {
+    print('Response data for match details: ${response.data}'); // Imprime toda la respuesta
+    return MatchInfoModel.fromJson(response.data);
+  } else {
+    throw Exception('Failed to fetch match details');
+  }
+}
   }
 
+  
+
   // ... (otros métodos de la clase TFTMatchDataSource) ...
-}
+
