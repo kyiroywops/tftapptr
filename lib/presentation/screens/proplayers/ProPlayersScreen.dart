@@ -1,43 +1,29 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:tftapp/presentation/providers/matchs_providers.dart';
+import 'package:tftapp/infrastructure/datasources/tft_match_datasource.dart';
 
-class ProPlayersScreen extends ConsumerWidget {
-  final String puuid = 'tu_puuid';  // Reemplaza con el PUUID real que quieres usar
+class ProPlayersScreen extends StatelessWidget {
+  // PUUID de prueba
+  final String puuid = '9wtqe0_9jqnAzHb-NzMeHQ0CQADVq0GQsS-F_2nU_ZEiO4QhjhXPKRTLppRTza9S1927K-eONC5IGQ';
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final matchIdsAsyncValue = ref.watch(matchIdsProvider({'puuid': puuid, 'region': 'americas'}));
+  Widget build(BuildContext context) {
+    // Instanciando el DataSource directamente para depuración
+    final dataSource = TFTMatchDataSource('americas');
+
+    dataSource.getMatchIdsByPUUID(puuid).then((ids) {
+      // Imprimir los IDs para depuración
+      print('Match IDs: $ids');
+    }).catchError((error) {
+      // Capturar y manejar errores aquí
+      print('Error: $error');
+    });
 
     return Scaffold(
       appBar: AppBar(
-        title: Text('Historial de Partidas'),
+        title: Text('Partidas del Jugador'),
       ),
-      body: matchIdsAsyncValue.when(
-        data: (matchIds) {
-          final lastFiveMatchIds = matchIds.take(5).toList();
-          final matchDetailsAsyncValue = ref.watch(matchDetailsProvider({'matchIds': lastFiveMatchIds, 'region': 'americas'}));
-          
-          return matchDetailsAsyncValue.when(
-            data: (matchDetails) => ListView.builder(
-              itemCount: matchDetails.length,
-              itemBuilder: (context, index) {
-                final match = matchDetails[index];
-                return ListTile(
-                  title: Text('ID de Partida: ${match.matchId}'),
-                  subtitle: Text('Versión de Datos: ${match.dataVersion}'),
-                  onTap: () {
-                    // Aquí podrías mostrar más detalles de la partida.
-                  },
-                );
-              },
-            ),
-            loading: () => CircularProgressIndicator(),
-            error: (error, stack) => Text('Error: $error'),
-          );
-        },
-        loading: () => CircularProgressIndicator(),
-        error: (error, stack) => Text('Error: $error'),
+      body: Center(
+        child: Text('Verifica la consola para los IDs de las partidas.'),
       ),
     );
   }
