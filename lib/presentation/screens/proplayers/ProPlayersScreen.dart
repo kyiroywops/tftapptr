@@ -68,7 +68,16 @@ class _ProPlayersScreenState extends State<ProPlayersScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text('Partidas del Jugador Pro')),
+      appBar: AppBar(title:
+      const Text(
+        'ProPlayers Tracker',
+        style: TextStyle(
+          fontFamily: 'ReadexPro',
+          fontSize: 25,
+          fontWeight: FontWeight.bold, // Usa FontWeight para especificar el peso
+      ),
+        )
+      ),
       body: _isLoading
           ? Center(child: CircularProgressIndicator())
           : _errorMessage.isNotEmpty

@@ -54,6 +54,22 @@ flutter:
   # To add assets to your application, add an assets section, like this:
   assets:
     - .env
+  
+  fonts:
+      - family: ReadexPro
+        fonts:
+          - asset: assets/fonts/ReadexPro-Regular.ttf
+            weight: 400
+          - asset: assets/fonts/ReadexPro-Medium.ttf
+            weight: 500
+          - asset: assets/fonts/ReadexPro-SemiBold.ttf
+            weight: 600
+          - asset: assets/fonts/ReadexPro-Bold.ttf
+            weight: 700
+          - asset: assets/fonts/ReadexPro-Light.ttf
+            weight: 300
+
+  
   #   - images/a_dot_burr.jpeg
   #   - images/a_dot_ham.jpeg
   # An image asset can refer to one or more resolution-specific "variants", see

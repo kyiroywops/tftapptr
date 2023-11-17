@@ -20,42 +20,46 @@ class BaseScreen extends ConsumerWidget {
     final selectedIndex = ref.watch(bottomNavigationProvider);
 
     return Scaffold(
+      backgroundColor: Colors.black,
       body: IndexedStack(
         index: selectedIndex,
         children: _screens,
-
       ),
-      bottomNavigationBar: Container(
-        decoration: BoxDecoration(
-
+      bottomNavigationBar: SafeArea(
+        child: Container(
+          decoration: const BoxDecoration(
+            color: Colors.black, 
+            
+          ),
+          child: GNav(
+            gap: 8, // Espacio entre el ícono y el texto
+            backgroundColor: Colors.black,
+            color: Colors.white,
+            activeColor: Colors.white,
+            selectedIndex: selectedIndex,
+            iconSize: 25,
+            padding: const EdgeInsets.all(15),
+            onTabChange: (index) => ref.watch(bottomNavigationProvider.notifier).selectTab(index),
+            tabs: const [
+              GButton(
+                icon: Icons.verified,
+                text: 'ProPlayers Tracker',
+              ),
+              GButton(
+                icon: Icons.local_fire_department,
+                text: 'Trending Comps',
+              ),
+              GButton(
+                icon: Icons.route,
+                text: 'Patch Notes',
+              ),
+              GButton(
+                icon: Icons.person_search,
+                text: 'Search',
+              ),
+            ],
+          ),
         ),
-        child: GNav(
-          gap:10,
-          backgroundColor: Colors.black,
-          color: Colors.white,
-          activeColor: Colors.white,
-          selectedIndex: selectedIndex,
-          onTabChange: (index) => ref.watch(bottomNavigationProvider.notifier).selectTab(index),
-          tabs: const [
-            GButton(
-              icon: Icons.verified,
-              iconSize: 25,
-              text: 'ProPlayers',
-              
-            ),
-            GButton(
-              icon: Icons.local_fire_department,
-              text: 'Trending Comps',
-            ),
-            GButton(
-              icon: Icons.route,
-              text: 'Patch Notes',
-            ),
-            GButton(
-              icon: Icons.person_search,
-              text: 'Search',
-            ),]
-        )
       ),
     );
   }
