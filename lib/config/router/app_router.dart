@@ -1,17 +1,19 @@
-import "package:go_router/go_router.dart";
+import 'package:go_router/go_router.dart';
+import 'package:tftapp/presentation/screens/proplayers/BaseScreen.dart';
 import 'package:tftapp/presentation/screens/proplayers/CompositionsTrendingScreen.dart';
 import 'package:tftapp/presentation/screens/proplayers/PatchNotesScreen.dart';
 import 'package:tftapp/presentation/screens/proplayers/ProPlayersScreen.dart';
 import 'package:tftapp/presentation/screens/proplayers/SearchPlayersScreen.dart';
-
-
-
 
 final appRouter = GoRouter(
   initialLocation: '/',
   routes: [
     GoRoute(
       path: '/',
+      builder: (context, state) => BaseScreen(),
+    ),
+    GoRoute(
+      path: '/pro_players',
       builder: (context, state) => ProPlayersScreen(),
     ),
     GoRoute(
@@ -28,5 +30,3 @@ final appRouter = GoRouter(
     ),
   ],
 );
- 
- 
