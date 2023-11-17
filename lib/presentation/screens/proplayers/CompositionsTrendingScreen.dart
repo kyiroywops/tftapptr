@@ -9,42 +9,44 @@ class CompositionsScreen extends StatelessWidget {
           'Trending Compositions',
           style: TextStyle(
             fontFamily: 'ReadexPro',
-            fontWeight: FontWeight.bold, // Usa FontWeight para especificar el peso
+            fontWeight: FontWeight.bold,
           ),
         ),
       ),
       body: SingleChildScrollView(
-        child:Column(
-      children: <Widget>[
-      for (int i = 0; i < 10; i++) // Crea 5 filas como ejemplo
-        Padding(
-          padding: const EdgeInsets.all(8.0), // Espacio entre cada fila
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: <Widget>[
-              Expanded( // Expanded hace que el Container se expanda para llenar el espacio disponible en la fila
-                child: Container(
-                  height: 90, // Altura del contenedor
-                  decoration: BoxDecoration(
-                    color: Colors.black.withOpacity(0.8), // Color de fondo gris claro
-                    borderRadius: BorderRadius.circular(35), // Bordes redondeados
-                  ),
-                  child: Center(
-                    child: Text(
-                      'Composición $i', // Texto dentro del contenedor
-                      style: TextStyle(color: Colors.grey[300], fontFamily: 'ReadexPro', fontWeight: FontWeight.bold),
+        child: Column(
+          children: <Widget>[
+            for (int i = 0; i < 10; i++) // Crea 10 filas como ejemplo
+              Padding(
+                padding: const EdgeInsets.all(8.0), // Espacio entre cada fila
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: <Widget>[
+                    // Recorte redondeado para la imagen
+                    Expanded(
+                      child: Container(
+                        height: 190, // Altura del contenedor
+                        decoration: BoxDecoration(
+                          color: Colors.black.withOpacity(0.85), // Color de fondo gris claro
+                          borderRadius: BorderRadius.circular(50), // Bordes redondeados
+                        ),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          children: List.generate(9, (index) => const Padding(
+                            padding: EdgeInsets.symmetric(horizontal: 1.0), // Espaciado entre los íconos
+                            child: CircleAvatar(
+                              backgroundImage: AssetImage('assets/tft-champion/TFT9_Quinn.TFT_Set9.png'),
+                              radius: 15, // Tamaño del círculo
+                            ),
+                          )),
+                        ),
+                      ),
                     ),
-                  ),
+                  ],
                 ),
               ),
-              
-            ],
-          ),
+          ],
         ),
-      ],
-    )
-    
-     
       ),
     );
   }

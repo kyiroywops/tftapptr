@@ -21,7 +21,7 @@ class SearchPlayersScreen extends StatelessWidget {
             child: TextField(
               decoration: InputDecoration(
                 
-                hintText: 'Put your SummonerID here :)',
+                hintText: 'Put the SummonerID here :)',
                 hintStyle: TextStyle(color: Colors.grey[300], fontFamily: 'ReadexPro', fontWeight: FontWeight.bold),
                 prefixIcon: Icon(Icons.search, color: Colors.grey[300]), // Ícono de lupa dentro del campo
                 filled: true,

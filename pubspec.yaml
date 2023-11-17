@@ -54,6 +54,11 @@ flutter:
   # To add assets to your application, add an assets section, like this:
   assets:
     - .env
+    - assets/tft-champion/
+    - assets/tft-item/
+    - assets/tft-augment/
+    - assets/tft-regalia/
+    - assets/tft-trait/
   
   fonts:
       - family: ReadexPro
