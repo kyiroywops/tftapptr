@@ -69,7 +69,7 @@ class CompositionsScreen extends StatelessWidget {
         child: Padding(
           padding: const EdgeInsets.all(8.0),
           child: Container(
-            height: 350, // Ajusta la altura según sea necesario
+            height: 370, // Ajusta la altura según sea necesario
             decoration: BoxDecoration(
               color: Colors.black.withOpacity(0.89),
               borderRadius: BorderRadius.circular(40),
@@ -84,6 +84,7 @@ class CompositionsScreen extends StatelessWidget {
                     style: textStyle(Colors.red.shade800, size: 48),
                   ),
                   const SizedBox(height: 8), // Espacio vertical
+                  Text('Freljord Vanquishers', style: textStyle(Colors.white)),
                   Text('Slow roll', style: textStyle(Colors.white)),
                   Text('Traits', style: textStyle(Colors.white)),
                   Text('No traits', style: textStyle(Colors.white)),

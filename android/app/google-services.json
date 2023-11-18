@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "960013547410",
+    "project_id": "sinerggytft",
+    "storage_bucket": "sinerggytft.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:960013547410:android:b7dc4b3e54faabb78d734b",
+        "android_client_info": {
+          "package_name": "com.example.tftapp"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDeJA7Uc2F_PMwfvtWdd4IlCfZQ7WW3ljU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
