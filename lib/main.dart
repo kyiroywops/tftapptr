@@ -1,15 +1,21 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart'; // Asegúrate de importar flutter_riverpod
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:tftapp/config/router/app_router.dart';
 import 'package:tftapp/config/theme/app_theme.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'firebase_options.dart'; // Asegúrate de importar firebase_options.dart
 
 Future<void> main() async {
-  await dotenv.load(fileName: ".env");
+  WidgetsFlutterBinding.ensureInitialized(); // Asegura la inicialización de los widgets
+  await dotenv.load(fileName: ".env"); // Carga las variables de entorno
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  ); // Inicializa Firebase
 
   runApp(
-    ProviderScope( // Envuelve tu aplicación en un ProviderScope
-      child: const MyApp(),
+    const ProviderScope(
+      child: MyApp(),
     ),
   );
 }
