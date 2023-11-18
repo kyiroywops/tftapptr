@@ -4,9 +4,9 @@ class CompositionsScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     // Estilo de texto reutilizable
-    TextStyle textStyle(Color color, {double size = 16, FontWeight weight = FontWeight.bold}) => TextStyle(
+    TextStyle textStyle(Color color, {double size = 16}) => TextStyle(
           fontFamily: 'ReadexPro',
-          fontWeight: weight,
+          fontWeight: FontWeight.bold,
           color: color,
           fontSize: size,
         );
@@ -37,15 +37,16 @@ class CompositionsScreen extends StatelessWidget {
               ),
             ),
           ),
-          const SizedBox(height: 4), // Espacio entre las estrellas y los items
+          const SizedBox(height: 10), // Espacio entre las estrellas y los items
+          // Fila para items
           Row(
             mainAxisSize: MainAxisSize.min,
             children: List.generate(
               3, // Suponiendo que hay 3 items
               (index) => const Padding(
-                padding: EdgeInsets.all(4.0),
+                padding: EdgeInsets.all(4.0), // Padding agregado aquí
                 child: CircleAvatar(
-                  radius: 10, // Tamaño de los ítems
+                  radius: 16, // Tamaño de los ítems
                   backgroundImage: AssetImage('assets/tft-item/TFT_Item_MadredsBloodrazor.png'),
                 ),
               ),
@@ -71,38 +72,39 @@ class CompositionsScreen extends StatelessWidget {
           child: Container(
             height: 350, // Ajusta la altura según sea necesario
             decoration: BoxDecoration(
-              color: Colors.black.withOpacity(0.89),
+              color: Colors.black.withOpacity(0.85),
               borderRadius: BorderRadius.circular(40),
             ),
-            child: Padding(
-              padding: const EdgeInsets.fromLTRB(25, 15, 15, 15), // Añade padding general al contenedor
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start, // Alineación a la izquierda
-                children: [
-                  Text(
-                    'S+',
-                    style: textStyle(Colors.red.shade800, size: 48),
+            child: Column(
+              children: [
+                Expanded(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      Text(
+                        'S+',
+                        style: textStyle(Colors.red.shade800, size: 48),
+                      ),
+                      Text('Slow roll', style: textStyle(Colors.white)),
+                      Text('Traits', style: textStyle(Colors.white)),
+                      Text('No traits', style: textStyle(Colors.white)),
+                    ],
                   ),
-                  const SizedBox(height: 8), // Espacio vertical
-                  Text('Slow roll', style: textStyle(Colors.white)),
-                  Text('Traits', style: textStyle(Colors.white)),
-                  Text('No traits', style: textStyle(Colors.white)),
-                  const SizedBox(height: 16), // Espacio vertical
-                  Expanded(
-                    child: ListView.builder(
-                      scrollDirection: Axis.horizontal,
-                      itemCount: 9, // Número de avatares a mostrar
-                      itemBuilder: (context, index) => Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 5.0, vertical: 5),
-                        child: buildAvatarWithNameAndItems(
-                          'Campeón $index',
-                          'assets/tft-champion/TFT9_Milio.TFT_Set9_Stage2.png',
-                        ),
+                ),
+                Expanded(
+                  child: ListView.builder(
+                    scrollDirection: Axis.horizontal,
+                    itemCount: 9, // Número de avatares a mostrar
+                    itemBuilder: (context, index) => Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                      child: buildAvatarWithNameAndItems(
+                        'Campeón $index',
+                        'assets/tft-champion/TFT9_Milio.TFT_Set9_Stage2.png',
                       ),
                     ),
                   ),
-                ],
-              ),
+                ),
+              ],
             ),
           ),
         ),
