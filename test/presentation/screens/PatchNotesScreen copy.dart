@@ -37,50 +37,15 @@ class PatchNotesScreen extends ConsumerWidget {
               return Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: Card(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      // Contenedor para el título, versión y URL de la imagen
-                      Container(
-                        color: Colors.black,
-                        padding: const EdgeInsets.all(16.0),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              patchNote.title, // Título de la nota del parche
-                              style: TextStyle(
-                                color: Colors.white,
-                                fontWeight: FontWeight.bold,
-                                fontSize: 24,
-                              ),
-                            ),
-                            SizedBox(height: 8),
-                            Text(
-                              'Version: ${patchNote.version}', // Versión del parche
-                              style: TextStyle(
-                                color: Colors.white,
-                                fontSize: 18,
-                              ),
-                            ),
-                          
-                          ],
-                        ),
+                  child: Padding(
+                    padding: const EdgeInsets.all(16.0),
+                    child: MarkdownBody(
+                      data: preprocessMarkdown(patchNote.content),
+                      styleSheet: MarkdownStyleSheet.fromTheme(Theme.of(context)).copyWith(
+                        p: Theme.of(context).textTheme.bodyText1!.copyWith(fontSize: 16),
+                        strong: Theme.of(context).textTheme.bodyText1!.copyWith(fontWeight: FontWeight.bold),
                       ),
-
-                      // Contenedor para el contenido de las notas del parche
-                      Container(
-                        color: Colors.black,
-                        padding: const EdgeInsets.all(16.0),
-                        child: MarkdownBody(
-                          data: preprocessMarkdown(patchNote.content),
-                          styleSheet: MarkdownStyleSheet.fromTheme(Theme.of(context)).copyWith(
-                            p: Theme.of(context).textTheme.bodyText1!.copyWith(fontSize: 16),
-                            strong: Theme.of(context).textTheme.bodyText1!.copyWith(fontWeight: FontWeight.bold),
-                          ),
-                        ),
-                      ),
-                    ],
+                    ),
                   ),
                 ),
               );

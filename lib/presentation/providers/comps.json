@@ -1,0 +1,97 @@
+{
+        "__collections__": {
+          "teamComps": [
+            {
+              "tier": "S+",
+              "nombreComp": "7 Demacia Kayle",
+              "traits": [
+                {
+                  "nameTraits": "Demacia",
+                  "imgTraits": "Trait_Icon_9_Demacia.TFT_Set9.png",
+                  "valueTraits": 7
+                },
+                {
+                  "nameTraits": "Bastion",
+                  "imgTraits": "Trait_Icon_9_Bastion.TFT_Set9.png",
+                  "valueTraits": 2
+                },
+                {
+                  "nameTraits": "Slayer",
+                  "imgTraits": "Trait_Icon_4_Slayer.png",
+                  "valueTraits": 2
+                }
+              ],
+              "champions": [
+                {
+                  "nombre": "Kayle",
+                  "imgChampions": "TFT9_Kayle.TFT_Set9.png",
+                  "estrellas": 2,
+                  "valueChampion": 3,
+                  "items": [
+                    {"imgItem": "TFT_Item_GuinsoosRageblade.png"},
+                    {"imgItem": "TFT_Item_GuinsoosRageblade.png"},
+                    {"imgItem": "TFT5_Item_GiantSlayerRadiant.png"}
+                  ]
+                },
+                {
+                  "nombre": "Poppy",
+                  "imgChampions": "TFT9_Poppy.TFT_Set9.png",
+                  "estrellas": 2,
+                  "valueChampion": 1,
+                  "items": [
+                    {"imgItem": "TFT_Item_WarmogsArmor.png"},
+                    {"imgItem": "TFT_Item_WarmogsArmor.png"}
+                  ]
+                },
+                {
+                  "nombre": "Galio",
+                  "imgChampions": "TFT9_Galio.TFT_Set9.png",
+                  "estrellas": 2,
+                  "valueChampion": 2,
+                  "items": []
+                },
+                {
+                  "nombre": "Quinn",
+                  "imgChampions": "TFT9_Quinn.TFT_Set9.png",
+                  "estrellas": 2,
+                  "valueChampion": 2,
+                  "items": []
+                },
+                {
+                  "nombre": "Sona",
+                  "imgChampions": "TFT9_Sona.TFT_Set9.png",
+                  "estrellas": 3,
+                  "valueChampion": 1,
+                  "items": [
+                    {"imgItem": "TFT_Item_RabadonsDeathcap.png"},
+                    {"imgItem": "TFT_Item_Morellonomicon.png"},
+                    {"imgItem": "TFT_Item_SpearOfShojin.png"}
+                  ]
+                },
+                {
+                  "nombre": "Fiora",
+                  "imgChampions": "TFT9_Fiora.TFT_Set9_Stage2.png",
+                  "estrellas": 2,
+                  "valueChampion": 1,
+                  "items": []
+                },
+                {
+                  "nombre": "Jarvan IV",
+                  "imgChampions": "TFT9_JarvanIV.TFT_Set9.png",
+                  "estrellas": 2,
+                  "valueChampion": 1,
+                  "items": []
+                },
+                {
+                  "nombre": "Shen",
+                  "imgChampions": "TFT9_Shen.TFT_Set9.png",
+                  "estrellas": 2,
+                  "valueChampion": 2,
+                  "items": []
+                }
+              ]
+            }
+          ]
+        }
+      }
+      
