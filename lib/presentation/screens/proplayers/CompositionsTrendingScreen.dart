@@ -12,10 +12,13 @@ class CompositionsScreen extends ConsumerWidget {
     
 
     return Scaffold(
+      backgroundColor: Colors.grey.shade900,
       appBar: AppBar(
+        backgroundColor: Colors.grey.shade900,
         title: const Text(
           'Trending Compositions',
           style: TextStyle(
+            color: Colors.white,
             fontFamily: 'ReadexPro',
             fontWeight: FontWeight.bold,
           ),
@@ -32,20 +35,23 @@ class CompositionsScreen extends ConsumerWidget {
   Widget buildCompsList(List<TeamComp> teamComps) {
     return SingleChildScrollView(
       child: Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: Column(
-          children: teamComps
-              .map((teamComp) => buildCompContainer(teamComp))
-              .toList(),
-        ),
+      padding: const EdgeInsets.all(15.0),
+      child: Column(
+        children: teamComps
+            .map((teamComp) => Padding(
+              padding: const EdgeInsets.only(bottom: 16.0), // Añade espacio entre los contenedores
+              child: buildCompContainer(teamComp),
+            ))
+            .toList(),
       ),
+    ),
     );
   }
 
   Widget buildCompContainer(TeamComp teamComp) {
  
       // Estilo de texto reutilizable
-    TextStyle textStyle(Color color, {double size = 16, FontWeight weight = FontWeight.bold}) => TextStyle(
+    TextStyle textStyle(Color color, {double size = 15, FontWeight weight = FontWeight.bold}) => TextStyle(
           fontFamily: 'ReadexPro',
           fontWeight: weight,
           color: color,
@@ -112,27 +118,74 @@ class CompositionsScreen extends ConsumerWidget {
     // Por ejemplo, puedes usar teamComp.nombreComp, teamComp.tier, etc.
     return Container(
       // Contenedor composiciones
-      height: 375, // Ajusta la altura según sea necesario
+      height: 335, // Ajusta la altura según sea necesario
       decoration: BoxDecoration(
-        color: Colors.black.withOpacity(0.89),
+        color: Colors.black.withOpacity(0.60),
         borderRadius: BorderRadius.circular(40),
       ),
       child: Padding(
         padding: const EdgeInsets.fromLTRB(
-            25, 15, 15, 15), // Añade padding general al contenedor
+            20, 15, 15, 20), // Añade padding general al contenedor
         child: Column(
           crossAxisAlignment:
               CrossAxisAlignment.start, // Alineación a la izquierda
           children: [
             Text(
               teamComp.tier,
-              style: textStyle(Colors.red.shade800, size: 48),
+              style: textStyle(ChampionUseCases.getTierColor(teamComp.tier), size: 48),
             ),
-            const SizedBox(height: 8), // Espacio vertical
+
+            const SizedBox(height: 2), // Espacio vertical
             Text(teamComp.nombreComp, style: textStyle(Colors.white)),
-            Text('Slow roll', style: textStyle(Colors.white)),
-            Text('Traits', style: textStyle(Colors.white)),
-            Text('No traits', style: textStyle(Colors.white)),
+            const SizedBox(height: 8), // Espacio vertical
+            Row(
+              children: [
+                Text('Traits', style: textStyle(Colors.white)),
+                const SizedBox(width: 8),
+                Container(
+                  height: 16, // Establece la altura máxima para limitar la expansión vertical
+                  child: Wrap(
+                    spacing: 8.0, // Espacio horizontal entre las imágenes
+                    children: teamComp.traits.map((trait) {
+                      return Row(
+                        children: [
+                          Container(
+                            width: 16, // Establece el ancho del icono
+                            height: 16, // Establece la altura del icono
+                            child: Image.asset(
+                              'assets/tft-trait/${trait.imgTraits}',
+                              width: 16, // Establece el ancho del icono dentro del Container
+                              height: 16, // Establece la altura del icono dentro del Container
+                            ),
+                          ),
+                          const SizedBox(width: 4), // Espacio entre la imagen y el valor
+                          Text(
+                            '${trait.valueTraits}', // Valor de teamComp.valueTraits
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 12, // Tamaño del valor
+                            ),
+                          ),
+                          const SizedBox(width: 4), // Espacio entre el valor y el nombre
+                          Text(
+                            '${trait.nameTraits}', // Nombre de teamComp.nameTraits
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 12, // Tamaño del nombre
+                            ),
+                          ),
+                        ],
+                      );
+                    }).toList(),
+                  ),
+                ),
+              ],
+            ),
+
+
+
+
+            
             const SizedBox(height: 16), // Espacio vertical
             Expanded(
               child: ListView.builder(

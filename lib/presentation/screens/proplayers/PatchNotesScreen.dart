@@ -32,10 +32,13 @@ class PatchNotesScreen extends ConsumerWidget {
     final patchNotesStream = ref.watch(patchNotesStreamProvider);
 
     return Scaffold(
+      backgroundColor: Colors.grey.shade900,
       appBar: AppBar(
+        backgroundColor: Colors.grey.shade900,
         title: const Text(
           'Patch Notes',
           style: TextStyle(
+            color: Colors.white,
             fontFamily: 'ReadexPro',
             fontWeight: FontWeight.bold,
           ),
@@ -57,7 +60,7 @@ class PatchNotesScreen extends ConsumerWidget {
                   ),
                   child: Container(
                     decoration: BoxDecoration(
-                      color: Colors.black.withOpacity(0.89),
+                      color: Colors.black.withOpacity(0.91),
                       borderRadius: BorderRadius.circular(20.0),
                     ),
                     child: Column(
