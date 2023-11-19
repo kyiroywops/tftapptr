@@ -35,7 +35,7 @@ class TFTMatchDataSource {
       print('getMatchIdsByPUUID called with puuid: $puuid');
 
     try {
-      final response = await _dio.get('matches/by-puuid/$puuid/ids?start=0&count=5');
+      final response = await _dio.get('matches/by-puuid/$puuid/ids?start=0&count=2');
       if (response.statusCode == 200) {
         return List<String>.from(response.data);
       } else {
