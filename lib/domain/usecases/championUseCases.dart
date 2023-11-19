@@ -22,9 +22,9 @@ class ChampionUseCases {
     switch (tier) {
       case 'S+':
         return Colors.red.shade800;
-      case 'S':
+      case 'S  ':
         return Colors.orange;
-      case 'A':
+      case 'A  ':
         return const Color.fromARGB(255, 230, 220, 127);
       default:
         return Colors.grey;

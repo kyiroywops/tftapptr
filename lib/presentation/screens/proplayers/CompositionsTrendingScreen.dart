@@ -65,10 +65,10 @@ class CompositionsScreen extends ConsumerWidget {
         children: [
           CircleAvatar(
             backgroundColor: ChampionUseCases.getBorderColor(champion.valueChampion),
-            radius: 32.5,
+            radius: 34.5,
             child: Container(
-              width: 60,  // Ajusta el ancho según tus necesidades
-              height: 60, // Ajusta el alto según tus necesidades
+              width: 63,  // Ajusta el ancho según tus necesidades
+              height: 63, // Ajusta el alto según tus necesidades
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(30.0),
                 image: DecorationImage(
@@ -84,25 +84,27 @@ class CompositionsScreen extends ConsumerWidget {
           Text(
             champion.nombre,  // Nombre del campeón
             style: textStyle(Colors.white),
+
           ),
-          const SizedBox(height: 4), // Espacio entre el texto y las estrellas
+          const SizedBox(height: 6), // Espacio entre el texto y las estrellas
           Row(
             mainAxisSize: MainAxisSize.min,
             children: List.generate(
               champion.estrellas,
               (index) => const Icon(
                 Icons.star,
-                color: Colors.yellow,
-                size: 20,
+                color: Color.fromARGB(255, 180, 180, 2),
+                size: 15,
               ),
             ),
           ),
+          const SizedBox(height: 6), // Espa
           Row(
             mainAxisSize: MainAxisSize.min,
             children: champion.items.map((item) => Padding(
               padding: EdgeInsets.all(4.0),
               child: CircleAvatar(
-                radius: 10,
+                radius: 12,
                 backgroundImage: AssetImage('assets/tft-item/${item.imgItem}'),
               ),
             )).toList(),
@@ -125,18 +127,36 @@ class CompositionsScreen extends ConsumerWidget {
       ),
       child: Padding(
         padding: const EdgeInsets.fromLTRB(
-            20, 15, 15, 20), // Añade padding general al contenedor
+            30, 15, 15, 20), // Añade padding general al contenedor
         child: Column(
           crossAxisAlignment:
               CrossAxisAlignment.start, // Alineación a la izquierda
           children: [
-            Text(
-              teamComp.tier,
-              style: textStyle(ChampionUseCases.getTierColor(teamComp.tier), size: 48),
-            ),
+            
+
 
             const SizedBox(height: 2), // Espacio vertical
-            Text(teamComp.nombreComp, style: textStyle(Colors.white)),
+           Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween, // Ajusta la alineación según necesites
+            children: [
+              Text(
+                teamComp.tier,
+                style: textStyle(
+                  ChampionUseCases.getTierColor(teamComp.tier),
+                  size: 48,
+                ),
+              ),
+              const SizedBox(width: 120), // Espacio horizontal, ajusta según necesites
+              Expanded( // Utiliza Expanded para evitar overflow de texto
+                child: Text(
+                  teamComp.nombreComp,
+                  style: textStyle(Colors.white),
+                  overflow: TextOverflow.ellipsis, // Añade esto si el texto es muy largo
+                ),
+              ),
+            ],
+          ),
+ 
             const SizedBox(height: 8), // Espacio vertical
             Row(
               children: [
@@ -186,7 +206,7 @@ class CompositionsScreen extends ConsumerWidget {
 
 
             
-            const SizedBox(height: 16), // Espacio vertical
+            const SizedBox(height: 12), // Espacio vertical
             Expanded(
               child: ListView.builder(
               scrollDirection: Axis.horizontal,
