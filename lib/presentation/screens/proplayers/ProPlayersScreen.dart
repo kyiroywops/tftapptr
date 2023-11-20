@@ -153,52 +153,91 @@ class _ProPlayersScreenBodyState extends State<_ProPlayersScreenBody> {
                         )
                       : Padding(
                         padding: const EdgeInsets.all(10.0),
-                        child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Flexible(
-                                child: Text(
-                                  player?.nombre ?? 'Unknown Player',
-                                  style: const TextStyle(
-                                    fontSize: 15,
-                                    color: Colors.white,
-                                    fontWeight: FontWeight.bold,
-                                    fontFamily: 'ReadexPro',
-                                    
-                                    ),
-                                ),
-                              ),
-                              const SizedBox(width: 10), // Espacio horizontal
-                              Flexible( // Usa Flexible aquí
-                                child: Text(
-                                  'Played $formattedTimeAgo',
-                                  style: const TextStyle(
-                                    color: Colors.grey,
-                                    fontFamily: 'ReadexPro',
-                                    fontWeight: FontWeight.w300,
-                                    ),
-                                ),
-                              ),
+                        child: Column(
+                          crossAxisAlignment:
+                            CrossAxisAlignment.start,
                             
-                             const SizedBox(height: 12), // Espacio vertical
-                             Expanded(
-                              child: Wrap(
-                                spacing: 5.0, // Espacio horizontal entre los widgets
-                                runSpacing: 5.0, // Espacio vertical entre las filas
-                                children: protagonist.units.map((unit) => 
-                                  Padding(
-                                    padding: const EdgeInsets.symmetric(horizontal: 5.0, vertical: 5),
-                                    child: buildAvatarWithNameAndItems(unit.characterId),
-                                    // Aquí reemplazamos el Chip con tu widget personalizado
+                          children: [
+                            const SizedBox(height: 2), // Espacio vertical
+                            Row(
+                              
+                              
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Flexible(
+                                    child: Text(
+                                      player?.nombre ?? 'Unknown Player',
+                                      style: const TextStyle(
+                                        fontSize: 15,
+                                        color: Colors.white,
+                                        fontWeight: FontWeight.bold,
+                                        fontFamily: 'ReadexPro',
+                                        
+                                        ),
+                                    ),
                                   ),
-                                ).toList(),
-                              ),
-                            ),
+                                  const SizedBox(width: 10), // Espacio horizontal
+                                  Flexible( // Usa Flexible aquí
+                                    child: Text(
+                                      'Played $formattedTimeAgo',
+                                      style: const TextStyle(
+                                        color: Colors.grey,
+                                        fontFamily: 'ReadexPro',
+                                        fontWeight: FontWeight.w300,
+                                        ),
+                                    ),
+                                  ),
 
-                            ],
-                          ),
+                                
+                                 const SizedBox(height: 8), // Espacio vertical
+                                //  Container(
+                                //   height: 16,
+                                //   child: Wrap(
+                                    
+                                //     spacing: 8.0, // Espacio horizontal entre los widgets
+                               
+                                //     children: protagonist.units.map((unit) {
+                                //       return Row(children: [
+                                //         Container(
+                                //           width: 16, 
+                                //           height: 16,
+                                //           child: buildAvatarWithNameAndItems(unit.characterId),
+
+
+                                //         ),
+                                //       ],);
+                                //     } 
+                                     
+                                     
+                                //     ).toList(),
+                                //   ),
+                                // ),
+
+                                ],
+                              ),
+                              const SizedBox(height: 8), // Espacio vertical
+                              Container(
+                  height: 70, // Altura fija para los avatares
+                  child: ListView.builder(
+                    scrollDirection: Axis.horizontal,
+                    itemCount: protagonist.units.length,
+                    itemBuilder: (context, index) {
+                      return Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 4.0),
+                        child: buildAvatarWithNameAndItems(protagonist.units[index].characterId),
+                      );
+                    },
+                  ),
+                ),
+              
+
+                          ],
                           
+                        ),
+                          
+                         
                       ),
+                      
                 );
 
 
