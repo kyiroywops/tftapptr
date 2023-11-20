@@ -163,6 +163,7 @@ class CompositionsScreen extends ConsumerWidget {
                 Text('Traits', style: textStyle(Colors.white)),
                 const SizedBox(width: 8),
                 Container(
+                  
                   height: 16, // Establece la altura máxima para limitar la expansión vertical
                   child: Wrap(
                     spacing: 8.0, // Espacio horizontal entre las imágenes
