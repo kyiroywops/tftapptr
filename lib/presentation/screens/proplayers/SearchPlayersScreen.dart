@@ -6,8 +6,11 @@ class SearchPlayersScreen extends StatefulWidget {
 }
 
 class _SearchPlayersScreenState extends State<SearchPlayersScreen> {
-  final List<String> servers = ['Americas', 'Europa', 'Asia', 'Oceania'];
-  String selectedServer = 'Americas'; // Valor predeterminado
+final List<String> servers = [
+  'BR1', 'EUN1', 'EUW1', 'JP1', 'KR', 'LA1', 'LA2',
+  'NA1', 'OC1', 'PH2', 'RU', 'SG2', 'TH2', 'TR1', 'TW2', 'VN2'
+];
+  String selectedServer = 'NA1'; // Valor predeterminado
 
   @override
   Widget build(BuildContext context) {

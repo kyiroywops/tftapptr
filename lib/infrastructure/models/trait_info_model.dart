@@ -17,10 +17,10 @@ class TraitInfoModel {
     // Proporcionar valores predeterminados para los campos que pueden ser nulos
     return TraitInfoModel(
       name: json['name'] as String? ?? 'default_name',
-      numUnits: json['numUnits'] as int? ?? 0,
+      numUnits: json['num_units'] as int? ?? 0,
       style: json['style'] as int? ?? 0,
-      tierCurrent: json['tierCurrent'] as int? ?? 0,
-      tierTotal: json['tierTotal'] as int? ?? 0,
+      tierCurrent: json['tier_current'] as int? ?? 0,
+      tierTotal: json['tier_total'] as int? ?? 0,
     );
   }
 }
