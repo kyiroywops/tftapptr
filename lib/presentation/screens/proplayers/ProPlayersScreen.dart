@@ -1,11 +1,13 @@
 import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:tftapp/domain/usecases/formatTimeAgoUseCases.dart';
 import 'package:tftapp/infrastructure/datasources/tft_match_datasource.dart';
 import 'package:tftapp/infrastructure/models/match_info_model.dart';
 import 'package:tftapp/infrastructure/models/proplayers_model.dart';
 import 'package:tftapp/presentation/providers/proplayers_providers.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class ProPlayersScreen extends ConsumerWidget {
   @override
@@ -36,50 +38,156 @@ class ProPlayersScreen extends ConsumerWidget {
 }
 
 
+Widget buildRankingAndRegionInfo(String ranking, String region) {
+  return Padding(
+    padding: const EdgeInsets.all(5.0),
+    child: Row(
+      mainAxisAlignment: MainAxisAlignment.start,
+      children: [
+        Icon(Icons.leaderboard, color: Colors.white, size: 15,), // Icono para 'Ranking'
+        SizedBox(width: 8), // Espacio entre el icono y el texto
+        Text(
+          'Ranking: $ranking',
+          style: TextStyle(color: Colors.white, fontFamily: 'ReadexPro'),
+        ),
+        const SizedBox(width: 20), // Espacio entre los dos conjuntos de icono y texto
+        Icon(Icons.public, color: Colors.white, size: 15,), // Icono para 'Región'
+        const SizedBox(width: 8), // Espacio entre el icono y el texto
+        Text(
+          'Región: $region',
+          style: TextStyle(color: Colors.white, fontFamily: 'ReadexPro'),
+        ),
+      ],
+    ),
+  );
+}
 
-  Widget buildAvatarWithNameAndItems(String champion, int tier, List<String> itemNames) {
 
-     List<Widget> itemWidgets = itemNames.map((itemName) {
+
+Widget buildTimeAndRoundInfo(double timeEliminated, int lastRound) {
+  double timeEliminatedInSeconds = timeEliminated; // Reemplaza con tu valor real
+  int timeEliminatedInMinutes = (timeEliminatedInSeconds / 60).ceil();
+
+
+  return Padding(
+    padding: const EdgeInsets.all(5),
+    child: Row(
+      children: [
+        // Widget para Time Eliminated
+        Icon(Icons.timer, color: Colors.white,
+        size: 15,
+  
+        
+        ), // Usa el icono que prefieras
+        const SizedBox(width: 8), // Espacio entre el icono y el texto
+        Text(
+          'Eliminado: ${timeEliminatedInMinutes} min', // Ajusta el formato como prefieras
+          style: const TextStyle(color: Colors.white, fontFamily: 'ReadexPro'),
+        ),
+        const SizedBox(width: 20), // Espacio entre los dos widgets
+  
+        // Widget para Last Round
+        const Icon(Icons.gamepad, color: Colors.white, size: 15,), // Usa el icono que prefieras
+        SizedBox(width: 8), // Espacio entre el icono y el texto
+        Text(
+          'Última Ronda: $lastRound',
+          style: const TextStyle(color: Colors.white, fontFamily: 'ReadexPro'),
+        ),
+      ],
+    ),
+  );
+}
+
+Widget buildEliminatedAndDamageInfo(int playersEliminated, int totalDamageToPlayers) {
+  return Padding(
+    padding: const EdgeInsets.all(5.0),
+    child: Row(
+      children: [
+        const Icon(Icons.person_remove, color: Colors.white, 
+        size: 15,
+        ), // Icono para 'Players Eliminated'
+        const SizedBox(width: 8), // Espacio entre el icono y el texto
+        Text(
+          'Eliminados: $playersEliminated',
+          style: const TextStyle(color: Colors.white, fontFamily: 'ReadexPro'),
+        ),
+        const SizedBox(width: 20), // Espacio entre los dos conjuntos de icono y texto
+        const Icon(Icons.flash_on, color: Colors.white, size: 15,), // Icono para 'Total Damage to Players'
+        const SizedBox(width: 8), // Espacio entre el icono y el texto
+        Text(
+          'Daño total: $totalDamageToPlayers',
+          style: const TextStyle(color: Colors.white, fontFamily: 'ReadexPro'),
+        ),
+      ],
+    ),
+  );
+}
+
+
+
+Widget buildTwitchIcon(String twitchUrl) {
+  return InkWell(
+    onTap: () async {
+      final Uri url = Uri.parse(twitchUrl);
+      if (await canLaunchUrl(url)) {
+        await launchUrl(url);
+      } else {
+        // Maneja el error como prefieras
+        print('No se pudo abrir $twitchUrl');
+      }
+    },
+    child: const Icon(
+      FontAwesomeIcons.twitch,
+      color: Colors.deepPurpleAccent,
+      size: 24.0,
+    ),
+  );
+}
+
+Widget buildAvatarWithNameAndItems(
+    String champion, int tier, List<String> itemNames) {
+  List<Widget> itemWidgets = itemNames.map((itemName) {
     String itemAssetPath = 'assets/tft-item/$itemName.png';
     return Padding(
-        padding: const EdgeInsets.all(4.0),
-        child: CircleAvatar(
-          radius: 12, // Ajusta el radio según tus necesidades
-          backgroundImage: AssetImage(itemAssetPath),
-        ),
-      );
-    }).toList();
+      padding: const EdgeInsets.all(4.0),
+      child: CircleAvatar(
+        radius: 12, // Ajusta el radio según tus necesidades
+        backgroundImage: AssetImage(itemAssetPath),
+      ),
+    );
+  }).toList();
 
   return Column(
     children: [
       CircleAvatar(
         radius: 34.5,
         child: Container(
-          width: 63,  // Ajusta el ancho según tus necesidades
+          width: 63, // Ajusta el ancho según tus necesidades
           height: 63, // Ajusta el alto según tus necesidades
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(30.0),
             image: DecorationImage(
               image: AssetImage('assets/tft-champions/$champion.png'),
-              fit: BoxFit.cover, // Ajusta el ajuste de la imagen según tus necesidades
-              alignment: Alignment(1.0, 0.0), // Mueve la imagen hacia la derecha
+              fit: BoxFit
+                  .cover, // Ajusta el ajuste de la imagen según tus necesidades
+              alignment:
+                  Alignment(1.0, 0.0), // Mueve la imagen hacia la derecha
             ),
           ),
-          
         ),
       ),
-        const SizedBox(height: 4),
-       Text(
-  champion.replaceFirst('TFT9_', ''),  // Elimina el prefijo 'TFT9_' del nombre
-  style: const TextStyle(
-    color: Colors.white,
-    fontFamily: 'ReadexPro',
-    fontWeight: FontWeight.bold,
-    
-    ),
-  ),
-  const SizedBox(height: 6), // Espacio entre el texto y las estrellas
-           Row(
+      const SizedBox(height: 4),
+      Text(
+        champion.replaceFirst(
+            'TFT9_', ''), // Elimina el prefijo 'TFT9_' del nombre
+        style: const TextStyle(
+          color: Colors.white,
+          fontFamily: 'ReadexPro',
+          fontWeight: FontWeight.bold,
+        ),
+      ),
+      const SizedBox(height: 6), // Espacio entre el texto y las estrellas
+      Row(
         mainAxisSize: MainAxisSize.min,
         children: List.generate(
           tier, // Asume que el número de estrellas se pasa como argumento
@@ -90,18 +198,14 @@ class ProPlayersScreen extends ConsumerWidget {
           ),
         ),
       ),
-  const SizedBox(height: 6), 
-  Row(
+      const SizedBox(height: 6),
+      Row(
         mainAxisSize: MainAxisSize.min,
         children: itemWidgets,
       ),
-     
-
-    
     ],
   );
 }
-      
 
 class _ProPlayersScreenBody extends StatefulWidget {
   final List<ProPlayer> proPlayers;
@@ -115,7 +219,8 @@ class _ProPlayersScreenBody extends StatefulWidget {
 
 class _ProPlayersScreenBodyState extends State<_ProPlayersScreenBody> {
   Map<String, List<MatchInfoModel>> _playerMatches = {};
-  List<MatchInfoModel> _allMatches = []; // Lista combinada de todos los partidos
+  List<MatchInfoModel> _allMatches =
+      []; // Lista combinada de todos los partidos
   bool _isLoading = true;
   String _errorMessage = '';
 
@@ -145,148 +250,138 @@ class _ProPlayersScreenBodyState extends State<_ProPlayersScreenBody> {
     final dataSource = TFTMatchDataSource(region);
     final matchIds = await dataSource.getMatchIdsByPUUID(puuid);
     final matchDetailsFutures = matchIds.map(dataSource.getMatchDetailsById);
-    final matches = await Future.wait(matchDetailsFutures); 
-    matches.sort((a, b) => b.gameDatetime.compareTo(a.gameDatetime)); // Ordenar de más reciente a más antiguo
-
+    final matches = await Future.wait(matchDetailsFutures);
+    matches.sort((a, b) => b.gameDatetime
+        .compareTo(a.gameDatetime)); // Ordenar de más reciente a más antiguo
 
     _playerMatches[puuid] = matches;
   }
 
   @override
   Widget build(BuildContext context) {
-     _allMatches = _playerMatches.values
-    .expand((matches) => matches)
-    .toList()
-    ..sort((a, b) => b.gameDatetime.compareTo(a.gameDatetime));
-
-
+    _allMatches = _playerMatches.values.expand((matches) => matches).toList()
+      ..sort((a, b) => b.gameDatetime.compareTo(a.gameDatetime));
 
     return _isLoading
-      ? const Center(child: CircularProgressIndicator())
-      : _errorMessage.isNotEmpty
-        ? Center(child: Text('Error: $_errorMessage'))
-        : SingleChildScrollView(
-            child: Column(
-              children: _allMatches.map((match) {
-                final protagonist = match.participants
-                    .firstWhereOrNull((p) => widget.proPlayers.any((player) => player.puuid == p.puuid));
-                final formattedTimeAgo = formatTimeAgo(match.gameDatetime);
+        ? const Center(child: CircularProgressIndicator())
+        : _errorMessage.isNotEmpty
+            ? Center(child: Text('Error: $_errorMessage'))
+            : SingleChildScrollView(
+                child: Column(
+                  children: _allMatches.map((match) {
+                    final protagonist = match.participants.firstWhereOrNull(
+                        (p) => widget.proPlayers
+                            .any((player) => player.puuid == p.puuid));
+                    final formattedTimeAgo = formatTimeAgo(match.gameDatetime);
 
-                // Encuentra el objeto ProPlayer correspondiente al protagonista
-                final player = widget.proPlayers.firstWhereOrNull(
-                  (proPlayer) => proPlayer.puuid == protagonist?.puuid
-                );
-                return Container(
-                  margin: EdgeInsets.all(8),
-                  padding: EdgeInsets.all(8),
-                  height: 335,
-                  width: MediaQuery.of(context).size.width - 16, // Asegúrate de que el ancho esté acotado
-                  decoration: BoxDecoration(
-                    color: Colors.black.withOpacity(0.6),
-                    borderRadius: BorderRadius.circular(40),
-                  ),
-                  child: protagonist == null
-                      ? Text(
-                          'Match ID: ${match.matchId} - Protagonist not found',
-                          style: TextStyle(color: Colors.red),
-                        )
-                      : Padding(
-                        padding: const EdgeInsets.all(10.0),
-                        child: Column(
-                          crossAxisAlignment:
-                            CrossAxisAlignment.start,
-                            
-                          children: [
-                            const SizedBox(height: 2), // Espacio vertical
-                            Row(
-                              
-                              
-                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    // Encuentra el objeto ProPlayer correspondiente al protagonista
+                    final player = widget.proPlayers.firstWhereOrNull(
+                        (proPlayer) => proPlayer.puuid == protagonist?.puuid);
+                    return Container(
+                      margin: EdgeInsets.all(8),
+                      padding: EdgeInsets.all(8),
+                      height: 400,
+                      width: MediaQuery.of(context).size.width -
+                          16, // Asegúrate de que el ancho esté acotado
+                      decoration: BoxDecoration(
+                        color: Colors.black.withOpacity(0.6),
+                        borderRadius: BorderRadius.circular(40),
+                      ),
+                      child: protagonist == null
+                          ? Text(
+                              'Match ID: ${match.matchId} - Protagonist not found',
+                              style: TextStyle(color: Colors.red),
+                            )
+                          : Padding(
+                              padding: const EdgeInsets.all(10.0),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  Flexible(
-                                    child: Padding(
-                                      padding: const EdgeInsets.only(left: 20),
-                                      child: Text(
-                                        player?.nombre ?? 'Unknown Player',
-                                        style: const TextStyle(
-                                          fontSize: 20,
-                                          color: Colors.white,
-                                          fontWeight: FontWeight.bold,
-                                          fontFamily: 'ReadexPro',
-                                          
+                                  const SizedBox(height: 2), // Espacio vertical
+                                  Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      Flexible(
+                                        child: Padding(
+                                          padding:
+                                              const EdgeInsets.only(left: 20),
+                                          child: Text(
+                                            player?.nombre ?? 'Unknown Player',
+                                            style: const TextStyle(
+                                              fontSize: 20,
+                                              color: Colors.white,
+                                              fontWeight: FontWeight.bold,
+                                              fontFamily: 'ReadexPro',
+                                            ),
                                           ),
+                                          ),
+                                      ),
+                                      buildTwitchIcon(player?.twitchLink ?? ''),
+                                      const SizedBox(
+                                          width: 10), // Espacio horizontal
+                                      Flexible(
+                                        // Usa Flexible aquí
+                                        child: Text(
+                                          'Played $formattedTimeAgo',
+                                          style: const TextStyle(
+                                            color: Colors.grey,
+                                            fontFamily: 'ReadexPro',
+                                            fontWeight: FontWeight.w300,
+                                          ),
+                                        ),
+                                      ),
+
+                                      const SizedBox(height: 8),
+                                    ],
+                                  ),
+                                  const SizedBox(height: 8),
+                                  Padding(
+                                    padding: const EdgeInsets.only(left: 10),
+                                    child: Text(
+                                      '${protagonist.placement.toString()}st Place',
+                                      style: const TextStyle(
+                                        color: Colors.grey,
+                                        fontSize: 30,
+                                        fontFamily: 'ReadexPro',
+                                        fontWeight: FontWeight.bold,
                                       ),
                                     ),
                                   ),
-                                  const SizedBox(width: 10), // Espacio horizontal
-                                  Flexible( // Usa Flexible aquí
-                                    child: Text(
-                                      'Played $formattedTimeAgo',
-                                      style: const TextStyle(
-                                        color: Colors.grey,
-                                        fontFamily: 'ReadexPro',
-                                        fontWeight: FontWeight.w300,
-                                        ),
+                                  const SizedBox(height: 5), // Espacio vertical
+                                  buildRankingAndRegionInfo(player?.ranking ?? 'Unknown', player?.region ?? 'Unknown'),
+                                  const SizedBox(height: 5), // Espacio vertical
+                                  buildTimeAndRoundInfo(protagonist.timeEliminated, protagonist.lastRound),
+                                  const SizedBox(height: 5), // Espacio vertical
+                                  buildEliminatedAndDamageInfo(protagonist.playersEliminated, protagonist.totalDamageToPlayers),
+
+
+                                  const SizedBox(
+                                      height: 12), 
+                                  Expanded(
+                                    child: ListView.builder(
+                                      scrollDirection: Axis.horizontal,
+                                      itemCount: protagonist.units.length,
+                                      itemBuilder: (context, index) {
+                                        return Padding(
+                                          padding: const EdgeInsets.symmetric(
+                                              horizontal: 5, vertical: 5),
+                                          child: buildAvatarWithNameAndItems(
+                                              protagonist
+                                                  .units[index].characterId,
+                                              protagonist.units[index].tier,
+                                              protagonist
+                                                  .units[index].itemNames),
+                                        );
+                                      },
                                     ),
                                   ),
-
-                                
-                                 const SizedBox(height: 8), // Espacio vertical
-                                //  Container(
-                                //   height: 16,
-                                //   child: Wrap(
-                                    
-                                //     spacing: 8.0, // Espacio horizontal entre los widgets
-                               
-                                //     children: protagonist.units.map((unit) {
-                                //       return Row(children: [
-                                //         Container(
-                                //           width: 16, 
-                                //           height: 16,
-                                //           child: buildAvatarWithNameAndItems(unit.characterId),
-
-
-                                //         ),
-                                //       ],);
-                                //     } 
-                                     
-                                     
-                                //     ).toList(),
-                                //   ),
-                                // ),
-
                                 ],
                               ),
-                              const SizedBox(height: 12), // Espacio vertical
-                              Expanded(
-                                              child: ListView.builder(
-                                                scrollDirection: Axis.horizontal,
-                                                itemCount: protagonist.units.length,
-                                                itemBuilder: (context, index) {
-                                                  return Padding(
-                                                    padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 5),
-                                                    child: buildAvatarWithNameAndItems(protagonist.units[index].characterId, protagonist.units[index].tier, protagonist.units[index].itemNames ),
-                                                  );
-                                                },
-                                              ),
-                                            ),
-              
-
-                          ],
-                          
-                        ),
-                          
-                         
-                      ),
-                      
-                );
-
-
-               
-               
-               
-              }).toList(),
-            ),
-          );
+                            ),
+                    );
+                  }).toList(),
+                ),
+              );
   }
 }
