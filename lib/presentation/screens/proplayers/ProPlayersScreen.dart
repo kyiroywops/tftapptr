@@ -37,7 +37,19 @@ class ProPlayersScreen extends ConsumerWidget {
 
 
 
-  Widget buildAvatarWithNameAndItems(champion) {
+  Widget buildAvatarWithNameAndItems(String champion, int tier, List<String> itemNames) {
+
+     List<Widget> itemWidgets = itemNames.map((itemName) {
+    String itemAssetPath = 'assets/tft-item/$itemName.png';
+    return Padding(
+        padding: const EdgeInsets.all(4.0),
+        child: CircleAvatar(
+          radius: 12, // Ajusta el radio según tus necesidades
+          backgroundImage: AssetImage(itemAssetPath),
+        ),
+      );
+    }).toList();
+
   return Column(
     children: [
       CircleAvatar(
@@ -53,10 +65,37 @@ class ProPlayersScreen extends ConsumerWidget {
               alignment: Alignment(1.0, 0.0), // Mueve la imagen hacia la derecha
             ),
           ),
+          
         ),
       ),
-      
-      
+        const SizedBox(height: 4),
+       Text(
+  champion.replaceFirst('TFT9_', ''),  // Elimina el prefijo 'TFT9_' del nombre
+  style: const TextStyle(
+    color: Colors.white,
+    fontFamily: 'ReadexPro',
+    fontWeight: FontWeight.bold,
+    
+    ),
+  ),
+  const SizedBox(height: 6), // Espacio entre el texto y las estrellas
+           Row(
+        mainAxisSize: MainAxisSize.min,
+        children: List.generate(
+          tier, // Asume que el número de estrellas se pasa como argumento
+          (index) => const Icon(
+            Icons.star,
+            color: Color.fromARGB(255, 180, 180, 2),
+            size: 15,
+          ),
+        ),
+      ),
+  const SizedBox(height: 6), 
+  Row(
+        mainAxisSize: MainAxisSize.min,
+        children: itemWidgets,
+      ),
+     
 
     
     ],
@@ -165,15 +204,18 @@ class _ProPlayersScreenBodyState extends State<_ProPlayersScreenBody> {
                                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                 children: [
                                   Flexible(
-                                    child: Text(
-                                      player?.nombre ?? 'Unknown Player',
-                                      style: const TextStyle(
-                                        fontSize: 15,
-                                        color: Colors.white,
-                                        fontWeight: FontWeight.bold,
-                                        fontFamily: 'ReadexPro',
-                                        
-                                        ),
+                                    child: Padding(
+                                      padding: const EdgeInsets.only(left: 20),
+                                      child: Text(
+                                        player?.nombre ?? 'Unknown Player',
+                                        style: const TextStyle(
+                                          fontSize: 20,
+                                          color: Colors.white,
+                                          fontWeight: FontWeight.bold,
+                                          fontFamily: 'ReadexPro',
+                                          
+                                          ),
+                                      ),
                                     ),
                                   ),
                                   const SizedBox(width: 10), // Espacio horizontal
@@ -215,20 +257,19 @@ class _ProPlayersScreenBodyState extends State<_ProPlayersScreenBody> {
 
                                 ],
                               ),
-                              const SizedBox(height: 8), // Espacio vertical
-                              Container(
-                  height: 70, // Altura fija para los avatares
-                  child: ListView.builder(
-                    scrollDirection: Axis.horizontal,
-                    itemCount: protagonist.units.length,
-                    itemBuilder: (context, index) {
-                      return Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 4.0),
-                        child: buildAvatarWithNameAndItems(protagonist.units[index].characterId),
-                      );
-                    },
-                  ),
-                ),
+                              const SizedBox(height: 12), // Espacio vertical
+                              Expanded(
+                                              child: ListView.builder(
+                                                scrollDirection: Axis.horizontal,
+                                                itemCount: protagonist.units.length,
+                                                itemBuilder: (context, index) {
+                                                  return Padding(
+                                                    padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 5),
+                                                    child: buildAvatarWithNameAndItems(protagonist.units[index].characterId, protagonist.units[index].tier, protagonist.units[index].itemNames ),
+                                                  );
+                                                },
+                                              ),
+                                            ),
               
 
                           ],
