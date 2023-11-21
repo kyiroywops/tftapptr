@@ -36,14 +36,14 @@ class ParticipantInfoModel {
     return ParticipantInfoModel(
       augments: (json['augments'] as List<dynamic>?)?.map((e) => e as String).toList() ?? [],
       companion: CompanionInfoModel.fromJson(json['companion']),
-      goldLeft: json['goldLeft'] as int? ?? 0,
-      lastRound: json['lastRound'] as int? ?? 0,
+      goldLeft: json['gold_left'] as int? ?? 0,
+      lastRound: json['last_round'] as int? ?? 0,
       level: json['level'] as int? ?? 0,
       placement: json['placement'] as int? ?? 0,
-      playersEliminated: json['playersEliminated'] as int? ?? 0,
+      playersEliminated: json['players_eliminated'] as int? ?? 0,
       puuid: json['puuid'] ?? '',
-      timeEliminated: (json['timeEliminated'] as num?)?.toDouble() ?? 0.0,
-      totalDamageToPlayers: json['totalDamageToPlayers'] as int? ?? 0,
+      timeEliminated: (json['time_eliminated'] as num?)?.toDouble() ?? 0.0,
+      totalDamageToPlayers: json['total_damage_to_players'] as int? ?? 0,
       traits: (json['traits'] as List<dynamic>?)
           ?.map((e) => TraitInfoModel.fromJson(e as Map<String, dynamic>))
           .toList() ?? [],

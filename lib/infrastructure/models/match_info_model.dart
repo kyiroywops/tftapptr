@@ -4,11 +4,13 @@ class MatchInfoModel {
   final String dataVersion;
   final String matchId;
   final List<ParticipantInfoModel> participants;
+  final DateTime gameDatetime; // Campo agregado para almacenar la fecha del juego
 
   MatchInfoModel({
     required this.dataVersion,
     required this.matchId,
     required this.participants,
+    required this.gameDatetime, // Agregar en el constructor
   });
 
   factory MatchInfoModel.fromJson(Map<String, dynamic> json) {
@@ -20,10 +22,14 @@ class MatchInfoModel {
         .map((e) => ParticipantInfoModel.fromJson(e as Map<String, dynamic>))
         .toList();
 
+    // Convertir el timestamp en milisegundos a DateTime
+    final gameDatetime = DateTime.fromMillisecondsSinceEpoch(json['info']['game_datetime']);
+
     return MatchInfoModel(
       dataVersion: dataVersion,
       matchId: matchId,
       participants: participants,
+      gameDatetime: gameDatetime, // Asignar el valor convertido
     );
   }
 }

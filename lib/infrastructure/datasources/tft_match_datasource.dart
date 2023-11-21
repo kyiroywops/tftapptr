@@ -19,18 +19,19 @@ class TFTMatchDataSource {
         );
 
   static String _getBaseUrl(String region) {
+    // Aquí puedes añadir más casos para otras regiones si es necesario
     switch (region.toLowerCase()) {
       case 'americas':
         return 'https://americas.api.riotgames.com/tft/match/v1/';
-      case 'asia':
-        return 'https://asia.api.riotgames.com/tft/match/v1/';
       case 'europe':
         return 'https://europe.api.riotgames.com/tft/match/v1/';
+      case 'asia':
+        return 'https://asia.api.riotgames.com/tft/match/v1/';
+      // ...
       default:
         throw Exception('Unsupported region');
     }
   }
-
   Future<List<String>> getMatchIdsByPUUID(String puuid, {int retryCount = 0}) async {
       print('getMatchIdsByPUUID called with puuid: $puuid');
 

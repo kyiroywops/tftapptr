@@ -19,8 +19,11 @@ dependencies:
   flutter_dotenv: ^5.1.0
   flutter_markdown: ^0.6.18+2
   flutter_riverpod: ^2.4.5
+  font_awesome_flutter: ^10.6.0
   go_router: ^12.1.0
   google_nav_bar: ^5.0.6
+  intl: ^0.18.1
+  url_launcher: ^6.2.1
 
 dev_dependencies:
   flutter_lints: ^2.0.0
@@ -33,6 +36,8 @@ flutter:
   assets:
     - .env
     - assets/tft-champion/
+
+    - assets/tft-champions/
     - assets/tft-item/
     - assets/tft-augment/
     - assets/tft-regalia/
