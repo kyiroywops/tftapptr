@@ -1,16 +1,35 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:tftapp/presentation/providers/summonerid_provider.dart';
 
-class SearchPlayersScreen extends StatefulWidget {
+class SearchPlayersScreen extends ConsumerWidget {
   @override
-  _SearchPlayersScreenState createState() => _SearchPlayersScreenState();
-}
+  Widget build(BuildContext context, WidgetRef ref) {
+    final TextEditingController _summonerNameController = TextEditingController();
+    final selectedServerState = ref.watch(selectedServerProvider.state);
+    final selectedServer = selectedServerState.state;
 
-class _SearchPlayersScreenState extends State<SearchPlayersScreen> {
-final List<String> servers = [
-  'BR1', 'EUN1', 'EUW1', 'JP1', 'KR', 'LA1', 'LA2',
-  'NA1', 'OC1', 'PH2', 'RU', 'SG2', 'TH2', 'TR1', 'TW2', 'VN2'
-];
-  String selectedServer = 'NA1'; // Valor predeterminado
+    final List<String> servers = [
+      'BR1', 'EUN1', 'EUW1', 'JP1', 'KR', 'LA1', 'LA2',
+      'NA1', 'OC1', 'PH2', 'RU', 'SG2', 'TH2', 'TR1', 'TW2', 'VN2'
+    ];
+
+
+  Future<void> _searchSummoner() async {
+  String summonerName = _summonerNameController.text; // Obtener el nombre del invocador del TextField
+  if (summonerName.isNotEmpty) {
+    try {
+      // Suponiendo que tienes un objeto dataSource de la clase TFTMatchDataSource
+      var summonerInfo = await ref.read(summonerProvider(summonerName).future);      // Haz algo con la información obtenida, como guardarla en el estado o navegar a otra pantalla
+    } catch (e) {
+      // Maneja cualquier error que pueda ocurrir durante la búsqueda
+      print('Error al buscar información del invocador: $e');
+    }
+  } else {
+    // Manejar el caso de que el campo de búsqueda esté vacío
+    print('Por favor, introduce un nombre de invocador para buscar.');
+  }
+}
 
   @override
   Widget build(BuildContext context) {
@@ -75,11 +94,11 @@ final List<String> servers = [
                             value: selectedServer,
                             icon: const Icon(Icons.arrow_drop_down_rounded, color: Colors.white), // Ícono de flecha
                             dropdownColor: Colors.black.withOpacity(0.4), // Color del menú desplegable
-                            onChanged: (String? newValue) {
-                              setState(() {
-                                  selectedServer = newValue!;
-                              });
-                            },
+                           onChanged: (String? newValue) {
+                            if (newValue != null) {
+                              context.read(selectedServerProvider.notifier).state = newValue;
+                            }
+                          },
                             items: servers.map<DropdownMenuItem<String>>((String value) {
                               return DropdownMenuItem<String>(
                                 value: value,
@@ -101,6 +120,7 @@ final List<String> servers = [
                     const SizedBox(width: 10),
                     Expanded(
                       child: TextField(
+                        controller: _summonerNameController,
                         cursorColor: Colors.white,
                         style: const TextStyle(
                           color: Colors.white, 
@@ -147,9 +167,7 @@ final List<String> servers = [
                     borderRadius: BorderRadius.circular(30),
                   ),
                   child: TextButton(
-                    onPressed: () {
-                     
-                    },
+                    onPressed: _searchSummoner,
                     child: const Text(
                       'Search',
                       style: TextStyle(
