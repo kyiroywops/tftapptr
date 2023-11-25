@@ -83,7 +83,8 @@ Future<SummonerInfoModel> getSummonerInfoBySummonerName(
       'https://$region.api.riotgames.com/lol/summoner/v4/summoners/by-name/$summonerName',
     );
     if (response.statusCode == 200) {
-      return SummonerInfoModel.fromJson(response.data);
+      // Agrega la región al crear el objeto SummonerInfoModel
+      return SummonerInfoModel.fromJson(response.data, region);
     } else {
       throw Exception('Failed to fetch summoner info for name: $summonerName');
     }
