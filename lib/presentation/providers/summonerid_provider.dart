@@ -17,6 +17,6 @@ final summonerProvider = FutureProvider.family<SummonerInfoModel, String>((ref, 
   final dataSource = TFTMatchDataSource(selectedServer);
   final repository = SummonerRepository(dataSource);
   
-  // Devolver la información del invocador
-  return repository.fetchSummonerInfo(summonerName);
+  // Devolver la información del invocador pasando ambos argumentos necesarios
+  return await repository.fetchSummonerInfo(summonerName, selectedServer);
 });

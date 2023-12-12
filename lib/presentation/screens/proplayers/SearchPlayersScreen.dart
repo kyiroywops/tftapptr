@@ -3,43 +3,39 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:tftapp/presentation/providers/summonerid_provider.dart';
 
 class SearchPlayersScreen extends ConsumerWidget {
+  const SearchPlayersScreen({Key? key}) : super(key: key);
+
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final TextEditingController _summonerNameController = TextEditingController();
-    final selectedServerState = ref.watch(selectedServerProvider);
-    final selectedServer = selectedServerState;
+    final TextEditingController summonerNameController = TextEditingController();
+    final selectedServer = ref.watch(selectedServerProvider);
 
+    void _searchSummoner() async {
+      final String summonerName = summonerNameController.text;
+      if (summonerName.isNotEmpty) {
+        final combinedParams = '$summonerName|${selectedServer}';
+        // Se utiliza ref.read aquí para obtener el valor, pero como se necesita en un futuro, se debería manejar de otra forma.
+        // Este cambio se hará más adelante.
+        final summonerInfoFuture = ref.read(summonerProvider(combinedParams).future);
+
+        try {
+          final summonerInfo = await summonerInfoFuture;
+          print('Summoner info: $summonerInfo');
+        } catch (e) {
+          print('Error al buscar información del invocador: $e');
+        }
+      } else {
+        print('Por favor, introduce un nombre de invocador para buscar.');
+      }
+    }
+
+    // Asegúrate de que tienes una lista de servidores definida en alguna parte
     final List<String> servers = [
       'BR1', 'EUN1', 'EUW1', 'JP1', 'KR', 'LA1', 'LA2',
       'NA1', 'OC1', 'PH2', 'RU', 'SG2', 'TH2', 'TR1', 'TW2', 'VN2'
     ];
 
-    Future<void> _searchSummoner() async {
-       String summonerName = _summonerNameController.text;
- 
-      if (summonerName.isNotEmpty) {
-        final combinedParams = '$summonerName|$selectedServer';
-        final summonerInfoFuture = ref.read(summonerProvider(combinedParams).future);
-
-        try {
-          // Suponiendo que tienes un objeto dataSource de la clase TFTMatchDataSource
-          final summonerInfo = await summonerInfoFuture;
-          print('Summoner info: $summonerInfo');
-
-
-        } catch (e) {
-          // Maneja cualquier error que pueda ocurrir durante la búsqueda
-          print('Error al buscar información del invocador: $e');
-        }
-      } else {
-        // Manejar el caso de que el campo de búsqueda esté vacío
-        print('Por favor, introduce un nombre de invocador para buscar.');
-      }
-    }
-
-    @override
-    Widget build(BuildContext context) {
-      return Scaffold(
+    return Scaffold(
         backgroundColor: Colors.grey.shade900,
         appBar: AppBar(
           backgroundColor: Colors.grey.shade900,
@@ -104,9 +100,8 @@ class SearchPlayersScreen extends ConsumerWidget {
                                   0.4), // Color del menú desplegable
                               onChanged: (String? newValue) {
                                 if (newValue != null) {
-                                  context
-                                      .read(selectedServerProvider.notifier)
-                                      .state = newValue;
+                                  // CORRECCIÓN: Usa 'ref.read' en lugar de 'context.read'
+                                  ref.read(selectedServerProvider.notifier).state = newValue;
                                 }
                               },
                               items: servers.map<DropdownMenuItem<String>>(
@@ -131,7 +126,7 @@ class SearchPlayersScreen extends ConsumerWidget {
                       const SizedBox(width: 10),
                       Expanded(
                         child: TextField(
-                          controller: _summonerNameController,
+                          
                           cursorColor: Colors.white,
                           style: const TextStyle(
                             color: Colors.white,
@@ -197,6 +192,5 @@ class SearchPlayersScreen extends ConsumerWidget {
           ),
         ),
       );
-    }
   }
 }
