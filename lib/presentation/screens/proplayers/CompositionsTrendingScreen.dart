@@ -25,11 +25,28 @@ class CompositionsScreen extends ConsumerWidget {
         ),
       ),
       body: teamCompsAsyncValue.when(
-        data: (teamComps) => buildCompsList(teamComps),
+        data: (teamComps) {
+          // Ordena la lista de composiciones antes de construir la lista
+          teamComps.sort((a, b) => getTierValue(a.tier).compareTo(getTierValue(b.tier)));
+          return buildCompsList(teamComps);
+        },
         loading: () => const Center(child: CircularProgressIndicator()),
         error: (error, stack) => Center(child: Text('Error: $error')),
       ),
     );
+  }
+
+  int getTierValue(String tier) {
+    switch (tier) {
+      case 'S+':
+        return 1;
+      case 'S':
+        return 2;
+      case 'A':
+        return 3;
+      default:
+        return 4;
+    }
   }
 
   Widget buildCompsList(List<TeamComp> teamComps) {
@@ -72,7 +89,7 @@ class CompositionsScreen extends ConsumerWidget {
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(30.0),
                 image: DecorationImage(
-                  image: AssetImage('assets/tft-champion/${champion.imgChampions}'),
+                  image: AssetImage('assets/tft-champions/${champion.imgChampions}'),
                   fit: BoxFit.cover, // Ajusta el ajuste de la imagen según tus necesidades
                   alignment: Alignment(1.0, 0.0), // Mueve la imagen hacia la derecha
                 ),
@@ -148,10 +165,14 @@ class CompositionsScreen extends ConsumerWidget {
               ),
               const SizedBox(width: 120), // Espacio horizontal, ajusta según necesites
               Expanded( // Utiliza Expanded para evitar overflow de texto
-                child: Text(
-                  teamComp.nombreComp,
-                  style: textStyle(Colors.white),
-                  overflow: TextOverflow.ellipsis, // Añade esto si el texto es muy largo
+                child: Padding(
+                  padding: const EdgeInsets.all(15.0),
+                  child: Text(
+                     teamComp.nombreComp, // El nombre de la composición
+                    style: textStyle(Colors.white),
+                    textAlign: TextAlign.right, // Alinea el texto a la derecha
+                    overflow: TextOverflow.visible, // Asegúrate de que el texto no se corten
+                  ),
                 ),
               ),
             ],
@@ -162,46 +183,53 @@ class CompositionsScreen extends ConsumerWidget {
               children: [
                 Text('Traits', style: textStyle(Colors.white)),
                 const SizedBox(width: 8),
-                Container(
-                  height: 16, // Establece la altura máxima para limitar la expansión vertical
-                  child: Wrap(
-                    spacing: 8.0, // Espacio horizontal entre las imágenes
-                    children: teamComp.traits.map((trait) {
-                      return Row(
-                        children: [
-                          Container(
-                            width: 16, // Establece el ancho del icono
-                            height: 16, // Establece la altura del icono
-                            child: Image.asset(
-                              'assets/tft-trait/${trait.imgTraits}',
-                              width: 16, // Establece el ancho del icono dentro del Container
-                              height: 16, // Establece la altura del icono dentro del Container
+                Flexible( // Utiliza Flexible en lugar de Expanded
+                  child: Container(
+                    height: 20, // Define una altura para el Container
+                    child: ListView(
+                      scrollDirection: Axis.horizontal,
+                      children: teamComp.traits.map((trait) {
+                        return Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            Padding(
+                              padding: const EdgeInsets.fromLTRB(20, 0, 10, 0),
+                              child: Container(
+                                width: 16,
+                                height: 16,
+                                child: Image.asset(
+                                  'assets/tft-trait/${trait.imgTraits}',
+                                  width: 16,
+                                  height: 16,
+                                 ),
+                              ),
                             ),
-                          ),
-                          const SizedBox(width: 4), // Espacio entre la imagen y el valor
-                          Text(
-                            '${trait.valueTraits}', // Valor de teamComp.valueTraits
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontSize: 12, // Tamaño del valor
+                            const SizedBox(width: 5),
+                            Padding(
+                              padding: const EdgeInsets.only(right: 2.0),
+                              child: Text(
+                                '${trait.valueTraits}',
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 12,
+                                ),
+                              ),
                             ),
-                          ),
-                          const SizedBox(width: 4), // Espacio entre el valor y el nombre
-                          Text(
-                            '${trait.nameTraits}', // Nombre de teamComp.nameTraits
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontSize: 12, // Tamaño del nombre
+                            Text(
+                              '${trait.nameTraits}',
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 12,
+                              ),
                             ),
-                          ),
-                        ],
-                      );
-                    }).toList(),
+                          ],
+                        );
+                      }).toList(),
+                    ),
                   ),
                 ),
               ],
             ),
-
 
 
 

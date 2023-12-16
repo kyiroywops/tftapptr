@@ -48,14 +48,22 @@ Widget buildAugmentsInfo(List<String> augments) {
         String augment = augments[index];
         // Elimina el prefijo 'TFT9_' del nombre del augment
         String cleanedName = augment
-          .replaceFirst('TFT9_', '')
-          .replaceFirst('Augment_', '');
+            .replaceFirst('TFT10_', '')
+            .replaceFirst('Augment_', '')
+            .replaceFirst('TFT6_', '')
+            .replaceFirst('TFT9_', '');
 
         return Padding(
           padding: const EdgeInsets.all(10),
           child: Row(
             children: [
-              Text('Augment', style: TextStyle(color: Colors.white, fontFamily: 'ReadexPro', fontWeight: FontWeight.bold),),
+              Text(
+                'Augment',
+                style: TextStyle(
+                    color: Colors.white,
+                    fontFamily: 'ReadexPro',
+                    fontWeight: FontWeight.bold),
+              ),
               // Opcional: Añadir un ícono o imagen antes del texto si lo deseas
               // Image.asset('path/to/icon.png', width: 24, height: 24),
               SizedBox(width: 8), // Espacio entre el ícono y el texto
@@ -72,48 +80,55 @@ Widget buildAugmentsInfo(List<String> augments) {
 }
 
 Widget buildTraitsInfo(List<TraitInfoModel> traits) {
-  return Container(
-    height: 40, // Ajusta la altura según tus necesidades
-    child: ListView.builder(
-      scrollDirection: Axis.horizontal,
-      itemCount: traits.where((trait) => trait.tierCurrent > 0).length,
-      itemBuilder: (context, index) {
-        TraitInfoModel trait = traits.where((trait) => trait.tierCurrent > 0).elementAt(index);
-        // Elimina los prefijos 'Set9_', 'Set9b_', y 'Set9_'
-        String cleanedName = trait.name.replaceAll(RegExp(r'Set9b?_?'), ''); 
-      // String traitAssetPath = 'assets/tft-trait/{trait.name}.png';
-      return Padding(
-        padding: const EdgeInsets.all(10),
-        child: Row(
-          children: [
-            
-              //  Image.asset(
-              //   traitAssetPath,
-              //   width: 5, // Ajusta el tamaño según tus necesidades
-              //   height: 5,
-              // ),
-              Text(
-                cleanedName, // Elimina el prefijo 'Set9_' del nombre del rasgo
-                style: TextStyle(color: Colors.white, fontFamily: 'ReadexPro', fontWeight: FontWeight.bold),
-              ),
-              const SizedBox(width: 5), // Espacio entre el nombre y el número de unidades
-            Text(
-              trait.numUnits.toString(),
-              style: TextStyle(color: Colors.white, fontFamily: 'ReadexPro', fontWeight: FontWeight.bold),
-          ),
-            ],
-          ),
-        );
-      },
+  return Padding(
+    padding: const EdgeInsets.all(4.0),
+    child: Container(
+      height: 40, // Ajusta la altura según tus necesidades
+      child: ListView.builder(
+        scrollDirection: Axis.horizontal,
+        itemCount: traits.where((trait) => trait.tierCurrent > 0).length,
+        itemBuilder: (context, index) {
+          TraitInfoModel trait =
+              traits.where((trait) => trait.tierCurrent > 0).elementAt(index);
+          // Elimina los prefijos 'Set9_', 'Set9b_', y 'Set9_'
+          String cleanedName = trait.name.replaceAll(RegExp(r'Set9b?_?'), '');
+    
+          // Ruta del asset
+          String traitAssetPath = 'assets/tft-trait/$cleanedName.png';
+    
+          return Padding(
+            padding: const EdgeInsets.all(10),
+            child: Row(
+              children: [
+                Image.asset(
+                  traitAssetPath,
+                  width: 20, // Ajusta el tamaño según tus necesidades
+                  height: 20,
+                ),
+    
+                const SizedBox(
+                    width: 5), // Espacio entre el nombre y el número de unidades
+                Text(
+                  trait.numUnits.toString(),
+                  style: TextStyle(
+                      color: Colors.white,
+                      fontFamily: 'ReadexPro',
+                      fontWeight: FontWeight.bold),
+                ),
+              ],
+            ),
+          );
+        },
+      ),
     ),
   );
-} 
+}
 
 Widget buildRankingAndRegionInfo(String ranking, String region) {
   return Padding(
     padding: const EdgeInsets.all(5.0),
     child: Row(
-      mainAxisAlignment: MainAxisAlignment.start,
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
         Icon(
           Icons.leaderboard,
@@ -122,19 +137,19 @@ Widget buildRankingAndRegionInfo(String ranking, String region) {
         ), // Icono para 'Ranking'
         SizedBox(width: 8), // Espacio entre el icono y el texto
         Text(
-          'Ranking: $ranking',
+          ranking,
           style: TextStyle(color: Colors.white, fontFamily: 'ReadexPro'),
         ),
         const SizedBox(
-            width: 20), // Espacio entre los dos conjuntos de icono y texto
+            width: 40), // Espacio entre los dos conjuntos de icono y texto
         Icon(
           Icons.public,
           color: Colors.white,
           size: 15,
         ), // Icono para 'Región'
-        const SizedBox(width: 8), // Espacio entre el icono y el texto
+        const SizedBox(width: 70), // Espacio entre el icono y el texto
         Text(
-          'Región: $region',
+          region,
           style: TextStyle(color: Colors.white, fontFamily: 'ReadexPro'),
         ),
       ],
@@ -150,6 +165,7 @@ Widget buildTimeAndRoundInfo(double timeEliminated, int lastRound) {
   return Padding(
     padding: const EdgeInsets.all(5),
     child: Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
         // Widget para Time Eliminated
         Icon(
@@ -157,12 +173,12 @@ Widget buildTimeAndRoundInfo(double timeEliminated, int lastRound) {
           color: Colors.white,
           size: 15,
         ), // Usa el icono que prefieras
-        const SizedBox(width: 8), // Espacio entre el icono y el texto
+        const SizedBox(width:10), // Espacio entre el icono y el texto
         Text(
-          'Eliminado: ${timeEliminatedInMinutes} min', // Ajusta el formato como prefieras
+          'time: ${timeEliminatedInMinutes} min', // Ajusta el formato como prefieras
           style: const TextStyle(color: Colors.white, fontFamily: 'ReadexPro'),
         ),
-        const SizedBox(width: 20), // Espacio entre los dos widgets
+        const SizedBox(width:28), // Espacio entre los dos widgets
 
         // Widget para Last Round
         const Icon(
@@ -170,9 +186,9 @@ Widget buildTimeAndRoundInfo(double timeEliminated, int lastRound) {
           color: Colors.white,
           size: 15,
         ), // Usa el icono que prefieras
-        SizedBox(width: 8), // Espacio entre el icono y el texto
+        SizedBox(width: 37), // Espacio entre el icono y el texto
         Text(
-          'Última Ronda: $lastRound',
+          'last round: $lastRound',
           style: const TextStyle(color: Colors.white, fontFamily: 'ReadexPro'),
         ),
       ],
@@ -185,27 +201,28 @@ Widget buildEliminatedAndDamageInfo(
   return Padding(
     padding: const EdgeInsets.all(5.0),
     child: Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
         const Icon(
           Icons.person_remove,
           color: Colors.white,
           size: 15,
         ), // Icono para 'Players Eliminated'
-        const SizedBox(width: 8), // Espacio entre el icono y el texto
+        const SizedBox(width: 0), // Espacio entre el icono y el texto
         Text(
-          'Eliminados: $playersEliminated',
+          'killed: $playersEliminated',
           style: const TextStyle(color: Colors.white, fontFamily: 'ReadexPro'),
         ),
         const SizedBox(
-            width: 20), // Espacio entre los dos conjuntos de icono y texto
+            width: 50), // Espacio entre los dos conjuntos de icono y texto
         const Icon(
           Icons.flash_on,
           color: Colors.white,
           size: 15,
         ), // Icono para 'Total Damage to Players'
-        const SizedBox(width: 8), // Espacio entre el icono y el texto
+        const SizedBox(width: 0), // Espacio entre el icono y el texto
         Text(
-          'Daño total: $totalDamageToPlayers',
+          'total damage: $totalDamageToPlayers',
           style: const TextStyle(color: Colors.white, fontFamily: 'ReadexPro'),
         ),
       ],
@@ -267,7 +284,7 @@ Widget buildAvatarWithNameAndItems(
       const SizedBox(height: 4),
       Text(
         champion.replaceFirst(
-            'TFT9_', ''), // Elimina el prefijo 'TFT9_' del nombre
+            'TFT10_', ''), // Elimina el prefijo 'TFT9_' del nombre
         style: const TextStyle(
           color: Colors.white,
           fontFamily: 'ReadexPro',
@@ -368,7 +385,7 @@ class _ProPlayersScreenBodyState extends State<_ProPlayersScreenBody> {
                     return Container(
                       margin: EdgeInsets.all(8),
                       padding: EdgeInsets.all(8),
-                      height: 490,
+                      height: 500,
                       width: MediaQuery.of(context).size.width -
                           16, // Asegúrate de que el ancho esté acotado
                       decoration: BoxDecoration(
