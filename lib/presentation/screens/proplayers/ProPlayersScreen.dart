@@ -135,19 +135,19 @@ Widget buildRankingAndRegionInfo(String ranking, String region) {
           color: Colors.white,
           size: 15,
         ), // Icono para 'Ranking'
-        SizedBox(width: 8), // Espacio entre el icono y el texto
+        SizedBox(width: 11), // Espacio entre el icono y el texto
         Text(
           ranking,
           style: TextStyle(color: Colors.white, fontFamily: 'ReadexPro'),
         ),
         const SizedBox(
-            width: 40), // Espacio entre los dos conjuntos de icono y texto
+            width: 42), // Espacio entre los dos conjuntos de icono y texto
         Icon(
           Icons.public,
           color: Colors.white,
           size: 15,
         ), // Icono para 'Región'
-        const SizedBox(width: 70), // Espacio entre el icono y el texto
+        const SizedBox(width: 69), // Espacio entre el icono y el texto
         Text(
           region,
           style: TextStyle(color: Colors.white, fontFamily: 'ReadexPro'),
@@ -208,7 +208,7 @@ Widget buildEliminatedAndDamageInfo(
           color: Colors.white,
           size: 15,
         ), // Icono para 'Players Eliminated'
-        const SizedBox(width: 0), // Espacio entre el icono y el texto
+        const SizedBox(width: 2), // Espacio entre el icono y el texto
         Text(
           'killed: $playersEliminated',
           style: const TextStyle(color: Colors.white, fontFamily: 'ReadexPro'),
@@ -220,7 +220,7 @@ Widget buildEliminatedAndDamageInfo(
           color: Colors.white,
           size: 15,
         ), // Icono para 'Total Damage to Players'
-        const SizedBox(width: 0), // Espacio entre el icono y el texto
+        const SizedBox(width: 5), // Espacio entre el icono y el texto
         Text(
           'total damage: $totalDamageToPlayers',
           style: const TextStyle(color: Colors.white, fontFamily: 'ReadexPro'),

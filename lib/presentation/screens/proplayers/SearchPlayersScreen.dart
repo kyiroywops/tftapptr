@@ -1,34 +1,63 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:tftapp/infrastructure/datasources/tft_match_datasource.dart';
+import 'package:tftapp/infrastructure/models/match_info_model.dart';
+import 'package:tftapp/presentation/providers/matchs_providers.dart';
 import 'package:tftapp/presentation/providers/summonerid_provider.dart';
 
-class SearchPlayersScreen extends ConsumerWidget {
+class SearchPlayersScreen extends ConsumerStatefulWidget {
   const SearchPlayersScreen({Key? key}) : super(key: key);
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final TextEditingController summonerNameController = TextEditingController();
-    final selectedServer = ref.watch(selectedServerProvider);
+  _SearchPlayersScreenState createState() => _SearchPlayersScreenState();
+}
 
-    void _searchSummoner() async {
-      final String summonerName = summonerNameController.text;
+class _SearchPlayersScreenState extends ConsumerState<SearchPlayersScreen> {
+  final TextEditingController summonerNameController = TextEditingController();
+  List<MatchInfoModel> matches = [];
+  bool isLoading = false;
+  String errorMessage = '';
+
+  Future<void> _searchSummoner() async {
+    setState(() => isLoading = true);
+    final String summonerName = summonerNameController.text;
+    final String selectedServer = ref.watch(selectedServerProvider.state).state;
+
+    try {
       if (summonerName.isNotEmpty) {
-        final combinedParams = '$summonerName|${selectedServer}';
-        // Se utiliza ref.read aquí para obtener el valor, pero como se necesita en un futuro, se debería manejar de otra forma.
-        // Este cambio se hará más adelante.
-        final summonerInfoFuture = ref.read(summonerProvider(combinedParams).future);
-
-        try {
-          final summonerInfo = await summonerInfoFuture;
-          print('Summoner info: $summonerInfo');
-        } catch (e) {
-          print('Error al buscar información del invocador: $e');
-        }
+        // Suponemos que `summonerProvider` devuelve un PUUID a partir del nombre y servidor
+        final summonerInfo = await ref.read(summonerProvider('$summonerName|$selectedServer').future);
+        final matchRepository = ref.read(tftMatchRepositoryProvider(selectedServer));
+        
+        final matchIds = await matchRepository.getMatchIdsByPUUID(summonerInfo.puuid);
+        final matchDetails = await matchRepository.getMatchDetailsByMatchIds(matchIds);
+        
+        setState(() {
+          matches = matchDetails;
+        });
       } else {
-        print('Por favor, introduce un nombre de invocador para buscar.');
+        setState(() {
+          errorMessage = 'Please enter a summoner name.';
+        });
       }
+    } catch (e) {
+      setState(() {
+        errorMessage = e.toString();
+      });
+    } finally {
+      setState(() => isLoading = false);
     }
+  }
 
+
+  @override
+  Widget build(BuildContext context) {
+    // Construye tu UI aquí
+      final String selectedServer = ref.watch(selectedServerProvider);
+
+  
+
+  
     // Asegúrate de que tienes una lista de servidores definida en alguna parte
     final List<String> servers = [
       'BR1', 'EUN1', 'EUW1', 'JP1', 'KR', 'LA1', 'LA2',
@@ -99,7 +128,7 @@ class SearchPlayersScreen extends ConsumerWidget {
                               dropdownColor: Colors.black.withOpacity(
                                   0.4), // Color del menú desplegable
                               onChanged: (String? newValue) {
-                                if (newValue != null) {
+                                if (newValue != null ) {
                                   // CORRECCIÓN: Usa 'ref.read' en lugar de 'context.read'
                                   ref.read(selectedServerProvider.notifier).state = newValue;
                                 }
