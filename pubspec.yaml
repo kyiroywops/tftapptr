@@ -35,7 +35,6 @@ flutter:
 
   assets:
     - .env
-    - assets/tft-champion/
 
     - assets/tft-champions/
     - assets/tft-item/

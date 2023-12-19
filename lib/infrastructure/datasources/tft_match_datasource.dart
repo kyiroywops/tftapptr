@@ -19,20 +19,38 @@ class TFTMatchDataSource {
           ),
         );
 
-  static String _getBaseUrl(String region) {
-    // Aquí puedes añadir más casos para otras regiones si es necesario
-    switch (region.toLowerCase()) {
-      case 'americas':
-        return 'https://americas.api.riotgames.com/tft/match/v1/';
-      case 'europe':
-        return 'https://europe.api.riotgames.com/tft/match/v1/';
-      case 'asia':
-        return 'https://asia.api.riotgames.com/tft/match/v1/';
-      // ...
-      default:
-        throw Exception('Unsupported region');
-    }
+  static String _getBaseUrl(String server) {
+      // Mapa de servidores a regiones
+      const serverToRegion = {
+        'BR1': 'americas',
+        'LA1': 'americas',
+        'LA2': 'americas',
+        'NA1': 'americas',
+        'americas' : 'americas',
+        // ... [otros servidores de Americas]
+        'EUN1': 'europe',
+        'EUW1': 'europe',
+        'TR1': 'europe',
+        'RU': 'europe',
+        // ... [otros servidores de Europa]
+        'KR': 'asia',
+        'JP1': 'asia',
+        // ... [otros servidores de Asia]
+        'OC1': 'apac',
+        'PH2': 'apac',
+        'VN2': 'apac',
+        // ... [otros servidores de APAC]
+      };
+
+    // Obtener la región correspondiente al servidor
+    String region = serverToRegion[server.toLowerCase()] ?? 'americas'; // Valor por defecto
+
+    // Construir la URL base
+    return 'https://${region}.api.riotgames.com/tft/match/v1/';
   }
+
+
+
 
   Future<List<String>> getMatchIdsByPUUID(String puuid,
       {int retryCount = 0}) async {
