@@ -443,87 +443,144 @@ Widget buildEliminatedAndDamageInfoSearch(
       'VN2'
     ];
 
-    return Scaffold(
-      backgroundColor: Colors.grey.shade900,
-      appBar: AppBar(
-        backgroundColor: Colors.grey.shade900,
-        title: const Text(
-          'Search Players',
-          style: TextStyle(
-            color: Colors.white,
-            fontFamily: 'ReadexPro',
-            fontWeight: FontWeight.bold,
-          ),
-        ),
+  return Scaffold(
+  backgroundColor: Colors.grey.shade900,
+  appBar: AppBar(
+    backgroundColor: Colors.grey.shade900,
+    title: const Text(
+      'Search Players',
+      style: TextStyle(
+        color: Colors.white,
+        fontFamily: 'ReadexPro',
+        fontWeight: FontWeight.bold,
       ),
-      body: isLoading
-          ? const Center(child: CircularProgressIndicator())
-          : Container(
-              color: Colors.grey.shade900,
-              padding: const EdgeInsets.all(16.0),
-              child: Column(
+    ),
+  ),
+  body: isLoading
+      ? const Center(child: CircularProgressIndicator())
+      : Container(
+          color: Colors.grey.shade900,
+          padding: const EdgeInsets.symmetric(horizontal: 16.0),
+          child: Column(
+            children: [
+              const SizedBox(height: 20),
+              // Row para el Dropdown y el SummonerID
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  TextField(
-                    controller: summonerNameController,
-                    decoration: InputDecoration(
-                      labelText: 'SummonerID',
-                      labelStyle: TextStyle(color: Colors.white),
-                      enabledBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(8),
-                        borderSide: BorderSide(color: Colors.white54),
-                      ),
-                      focusedBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(8),
-                        borderSide: BorderSide(color: Colors.white),
+                  // DropdownButton
+                  Container(
+                    padding: const EdgeInsets.fromLTRB(20, 8, 10, 8),
+                    decoration: BoxDecoration(
+                      color: Colors.black.withOpacity(0.6),
+                      borderRadius: BorderRadius.circular(30),
+                    ),
+                    child: DropdownButtonHideUnderline(
+                      child: ButtonTheme(
+                        alignedDropdown: true,
+                        child: DropdownButton<String>(
+                          value: selectedServer,
+                          iconSize: 30,
+                          icon: const Icon(Icons.arrow_drop_down, color: Colors.white),
+                          dropdownColor: Colors.black54,
+                          onChanged: (String? newValue) {
+                            if (newValue != null) {
+                              ref.read(selectedServerProvider.notifier).state = newValue;
+                            }
+                          },
+                          items: servers.map<DropdownMenuItem<String>>((String value) {
+                            return DropdownMenuItem<String>(
+                              value: value,
+                              child: Text(value, style: const TextStyle(color: Colors.white,
+                              fontFamily: 'ReadexPro',
+                              fontWeight: FontWeight.bold,
+                              fontSize: 14)),
+                            );
+                          }).toList(),
+                        ),
                       ),
                     ),
-                    style: TextStyle(color: Colors.white),
                   ),
-                  const SizedBox(height: 20),
-                  DropdownButton<String>(
-                    value: selectedServer,
-                    icon:
-                        const Icon(Icons.arrow_drop_down, color: Colors.white),
-                    dropdownColor: Colors.black54,
-                    onChanged: (String? newValue) {
-                      if (newValue != null) {
-                        ref.read(selectedServerProvider.notifier).state =
-                            newValue;
-                      }
-                    },
-                    items:
-                        servers.map<DropdownMenuItem<String>>((String value) {
-                      return DropdownMenuItem<String>(
-                        value: value,
-                        child:
-                            Text(value, style: TextStyle(color: Colors.white)),
-                      );
-                    }).toList(),
-                  ),
-                  const SizedBox(height: 20),
-                  ElevatedButton(
-                    onPressed: _searchSummoner,
-                    child: const Text('Search'),
-                  ),
-                  if (errorMessage.isNotEmpty)
-                    Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Text(errorMessage,
-                          style: TextStyle(color: Colors.red)),
-                    ),
+                  const SizedBox(width: 10), // Espaciado entre el Dropdown y el TextField
+                  // SummonerID TextField
                   Expanded(
-                    child: ListView.builder(
-                      itemCount: matches.length,
-                      itemBuilder: (context, index) {
-                        final match = matches[index];
-                        return buildMatchTileSearch(
-                            match); // Utiliza el widget que construye los detalles de la partida
-                      },
+                    child: Container(
+                      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 8),
+                      decoration: BoxDecoration(
+                        color: Colors.black.withOpacity(0.6),
+                        borderRadius: BorderRadius.circular(30),
+                      ),
+                      child: TextField(
+                        controller: summonerNameController,
+                        cursorColor: Colors.white,
+                        style: const TextStyle(
+                          color: Colors.white,
+                          fontSize: 14,
+                          fontFamily: 'ReadexPro',
+                          fontWeight: FontWeight.bold,
+                        ),
+                        decoration: InputDecoration(
+                          hintText: 'SummonerID',
+                          hintStyle: TextStyle(
+                            color: Colors.grey[300],
+                            fontSize: 14,
+                            fontFamily: 'ReadexPro',
+                            fontWeight: FontWeight.bold,
+                          ),
+                          prefixIcon: const Icon(Icons.search, color: Colors.white),
+                          border: InputBorder.none,
+                        ),
+                      ),
                     ),
                   ),
                 ],
               ),
-            ),
-    );
+              const SizedBox(height: 20),
+              // Botón de búsqueda con nuevo diseño
+              Container(
+                decoration: BoxDecoration(
+                  color: Colors.black.withOpacity(0.6),
+                  borderRadius: BorderRadius.circular(30),
+                ),
+                child: ElevatedButton(
+                  onPressed: _searchSummoner,
+                  style: ElevatedButton.styleFrom(
+                    primary: Colors.transparent,
+                    shadowColor: Colors.transparent,
+                    padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 18),
+                  ),
+                  child: const Text(
+                    'Search',
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 14,
+                      fontFamily: 'ReadexPro',
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ),
+              ),
+              const SizedBox(height: 20),
+              // Mensaje de error, si existe
+              if (errorMessage.isNotEmpty)
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Text(errorMessage, style: const TextStyle(color: Colors.red)),
+                ),
+              // Lista de partidas
+              Expanded(
+                child: ListView.builder(
+                  itemCount: matches.length,
+                  itemBuilder: (context, index) {
+                    final match = matches[index];
+                    return buildMatchTileSearch(match);
+                  },
+                ),
+              ),
+            ],
+          ),
+        ),
+);
+
   }
 }
