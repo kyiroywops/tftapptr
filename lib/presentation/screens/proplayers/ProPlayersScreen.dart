@@ -385,7 +385,7 @@ class _ProPlayersScreenBodyState extends State<_ProPlayersScreenBody> {
                     return Container(
                       margin: EdgeInsets.all(8),
                       padding: EdgeInsets.all(8),
-                      height: 500,
+                      height: 510,
                       width: MediaQuery.of(context).size.width -
                           16, // Asegúrate de que el ancho esté acotado
                       decoration: BoxDecoration(
