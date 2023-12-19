@@ -51,6 +51,7 @@ Widget buildAugmentsInfo(List<String> augments) {
             .replaceFirst('TFT10_', '')
             .replaceFirst('Augment_', '')
             .replaceFirst('TFT6_', '')
+            .replaceFirst('TFT7_', '')
             .replaceFirst('TFT9_', '');
 
         return Padding(
