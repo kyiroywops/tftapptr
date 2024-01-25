@@ -17,6 +17,7 @@ dependencies:
   flutter:
     sdk: flutter
   flutter_dotenv: ^5.1.0
+  flutter_launcher_icons: ^0.13.1
   flutter_markdown: ^0.6.18+2
   flutter_riverpod: ^2.4.5
   font_awesome_flutter: ^10.6.0
@@ -30,11 +31,17 @@ dev_dependencies:
   flutter_test:
     sdk: flutter
 
+flutter_icons:
+  android: true
+  ios: true
+  image_path: "assets/icons/icon1024.png"
+
 flutter:
   uses-material-design: true
 
   assets:
     - .env
+    - assets/icons/
 
     - assets/tft-champions/
     - assets/tft-item/

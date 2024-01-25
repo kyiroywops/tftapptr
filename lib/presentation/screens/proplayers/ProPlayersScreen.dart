@@ -19,13 +19,29 @@ class ProPlayersScreen extends ConsumerWidget {
       backgroundColor: Colors.grey.shade900,
       appBar: AppBar(
         backgroundColor: Colors.grey.shade900,
-        title: const Text(
-          'ProPlayers Tracker',
-          style: TextStyle(
-            fontFamily: 'ReadexPro',
-            color: Colors.white,
-            fontSize: 25,
-            fontWeight: FontWeight.bold,
+        title: Padding(
+          padding: const EdgeInsets.all(12.0),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Image.asset(
+                'assets/icons/logo.png', // Reemplaza con el camino a tu logo
+                height: 30.0,
+              ),
+              Text(
+                'ProPlayers Realtime',
+                style: TextStyle(
+                  color: Colors.white,
+                  fontFamily: 'ReadexPro',
+                  fontWeight: FontWeight.bold,
+                  fontSize: 15,
+                ),
+              ),
+              Icon(
+                Icons.discord, // Ícono de Discord
+                color: Colors.white,
+              ),
+            ],
           ),
         ),
       ),
@@ -93,10 +109,10 @@ Widget buildTraitsInfo(List<TraitInfoModel> traits) {
               traits.where((trait) => trait.tierCurrent > 0).elementAt(index);
           // Elimina los prefijos 'Set9_', 'Set9b_', y 'Set9_'
           String cleanedName = trait.name.replaceAll(RegExp(r'Set9b?_?'), '');
-    
+
           // Ruta del asset
           String traitAssetPath = 'assets/tft-trait/$cleanedName.png';
-    
+
           return Padding(
             padding: const EdgeInsets.all(10),
             child: Row(
@@ -106,9 +122,10 @@ Widget buildTraitsInfo(List<TraitInfoModel> traits) {
                   width: 20, // Ajusta el tamaño según tus necesidades
                   height: 20,
                 ),
-    
+
                 const SizedBox(
-                    width: 5), // Espacio entre el nombre y el número de unidades
+                    width:
+                        5), // Espacio entre el nombre y el número de unidades
                 Text(
                   trait.numUnits.toString(),
                   style: TextStyle(
@@ -174,12 +191,12 @@ Widget buildTimeAndRoundInfo(double timeEliminated, int lastRound) {
           color: Colors.white,
           size: 15,
         ), // Usa el icono que prefieras
-        const SizedBox(width:10), // Espacio entre el icono y el texto
+        const SizedBox(width: 10), // Espacio entre el icono y el texto
         Text(
           'time: ${timeEliminatedInMinutes} min', // Ajusta el formato como prefieras
           style: const TextStyle(color: Colors.white, fontFamily: 'ReadexPro'),
         ),
-        const SizedBox(width:28), // Espacio entre los dos widgets
+        const SizedBox(width: 28), // Espacio entre los dos widgets
 
         // Widget para Last Round
         const Icon(
@@ -247,6 +264,16 @@ Widget buildTwitchIcon(String twitchUrl) {
       color: Colors.deepPurpleAccent,
       size: 24.0,
     ),
+  );
+}
+
+Widget buildAdContainer() {
+  return Container(
+    height: 50, // Ajusta la altura según tus necesidades
+    margin: EdgeInsets.all(8),
+    color: Colors.grey, // Color de fondo para el anuncio
+    alignment: Alignment.center,
+    child: Text('Anuncio'), // Texto de marcador de posición para el anuncio
   );
 }
 

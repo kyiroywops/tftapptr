@@ -33,14 +33,31 @@ class PatchNotesScreen extends ConsumerWidget {
 
     return Scaffold(
       backgroundColor: Colors.grey.shade900,
-      appBar: AppBar(
+       appBar: AppBar(
         backgroundColor: Colors.grey.shade900,
-        title: const Text(
-          'Patch Notes',
-          style: TextStyle(
-            color: Colors.white,
-            fontFamily: 'ReadexPro',
-            fontWeight: FontWeight.bold,
+        title: Padding(
+          padding: const EdgeInsets.all(12.0),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Image.asset(
+                'assets/icons/logo.png', // Reemplaza con el camino a tu logo
+                height: 30.0,
+              ),
+              Text(
+                'Patch Notes',
+                style: TextStyle(
+                  color: Colors.white,
+                  fontFamily: 'ReadexPro',
+                  fontWeight: FontWeight.bold,
+                  fontSize: 15,
+                ),
+              ),
+              Icon(
+                Icons.discord, // Ícono de Discord
+                color: Colors.white,
+              ),
+            ],
           ),
         ),
       ),

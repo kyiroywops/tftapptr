@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+// import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:tftapp/config/router/app_router.dart';
 import 'package:tftapp/config/theme/app_theme.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -12,6 +13,9 @@ Future<void> main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   ); // Inicializa Firebase
+
+  // Inicializar Google Mobile Ads SDK
+  // await MobileAds.instance.initialize();
 
   runApp(
     const ProviderScope(
