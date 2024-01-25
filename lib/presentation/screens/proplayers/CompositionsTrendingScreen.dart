@@ -10,9 +10,9 @@ class CompositionsScreen extends ConsumerWidget {
     final teamCompsAsyncValue = ref.watch(teamCompsStreamProvider);
 
     return Scaffold(
-      backgroundColor: Colors.grey.shade900,
+      backgroundColor: Colors.black,
       appBar: AppBar(
-        backgroundColor: Colors.grey.shade900,
+        backgroundColor: Colors.black,
         title: Padding(
           padding: const EdgeInsets.all(12.0),
           child: Row(
@@ -159,7 +159,7 @@ class CompositionsScreen extends ConsumerWidget {
       // Contenedor composiciones
       height: 335, // Ajusta la altura según sea necesario
       decoration: BoxDecoration(
-        color: Colors.black.withOpacity(0.60),
+        color: Colors.grey.shade400.withOpacity(0.1),
         borderRadius: BorderRadius.circular(40),
       ),
       child: Padding(

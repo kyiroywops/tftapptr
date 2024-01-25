@@ -286,7 +286,7 @@ Widget buildEliminatedAndDamageInfoSearch(
         width: MediaQuery.of(context).size.width -
             16, // Asegúrate de que el ancho esté acotado
         decoration: BoxDecoration(
-          color: Colors.black.withOpacity(0.6),
+          color: Colors.grey.shade600.withOpacity(0.2),
           borderRadius: BorderRadius.circular(40),
         ),
         child: Padding(
@@ -444,9 +444,9 @@ Widget buildEliminatedAndDamageInfoSearch(
     ];
 
   return Scaffold(
-  backgroundColor: Colors.grey.shade900,
+  backgroundColor: Colors.black,
     appBar: AppBar(
-        backgroundColor: Colors.grey.shade900,
+        backgroundColor: Colors.black,
         title: Padding(
           padding: const EdgeInsets.all(12.0),
           child: Row(
@@ -476,7 +476,7 @@ Widget buildEliminatedAndDamageInfoSearch(
   body: isLoading
       ? const Center(child: CircularProgressIndicator())
       : Container(
-          color: Colors.grey.shade900,
+          color: Colors.black,
           padding: const EdgeInsets.symmetric(horizontal: 16.0),
           child: Column(
             children: [
@@ -489,7 +489,7 @@ Widget buildEliminatedAndDamageInfoSearch(
                   Container(
                     padding: const EdgeInsets.fromLTRB(20, 8, 10, 8),
                     decoration: BoxDecoration(
-                      color: Colors.black.withOpacity(0.6),
+                      color: Colors.grey.shade400.withOpacity(0.4),
                       borderRadius: BorderRadius.circular(30),
                     ),
                     child: DropdownButtonHideUnderline(
@@ -524,7 +524,7 @@ Widget buildEliminatedAndDamageInfoSearch(
                     child: Container(
                       padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 8),
                       decoration: BoxDecoration(
-                        color: Colors.black.withOpacity(0.6),
+                        color: Colors.grey.shade400.withOpacity(0.4),
                         borderRadius: BorderRadius.circular(30),
                       ),
                       child: TextField(
@@ -552,7 +552,7 @@ Widget buildEliminatedAndDamageInfoSearch(
                   ),
                 ],
               ),
-              const SizedBox(height: 20),
+              const SizedBox(height: 40),
               // Botón de búsqueda con nuevo diseño
               Container(
                 decoration: BoxDecoration(
@@ -562,7 +562,7 @@ Widget buildEliminatedAndDamageInfoSearch(
                 child: ElevatedButton(
                   onPressed: _searchSummoner,
                   style: ElevatedButton.styleFrom(
-                    primary: Colors.transparent,
+                    primary: Colors.grey.shade400.withOpacity(0.8),
                     shadowColor: Colors.transparent,
                     padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 18),
                   ),

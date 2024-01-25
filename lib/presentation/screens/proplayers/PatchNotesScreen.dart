@@ -32,9 +32,9 @@ class PatchNotesScreen extends ConsumerWidget {
     final patchNotesStream = ref.watch(patchNotesStreamProvider);
 
     return Scaffold(
-      backgroundColor: Colors.grey.shade900,
+      backgroundColor: Colors.black,
        appBar: AppBar(
-        backgroundColor: Colors.grey.shade900,
+        backgroundColor: Colors.black,
         title: Padding(
           padding: const EdgeInsets.all(12.0),
           child: Row(

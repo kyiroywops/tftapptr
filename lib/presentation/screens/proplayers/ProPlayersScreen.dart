@@ -16,9 +16,9 @@ class ProPlayersScreen extends ConsumerWidget {
     final proPlayersAsyncValue = ref.watch(proPlayersStreamProvider);
 
     return Scaffold(
-      backgroundColor: Colors.grey.shade900,
+      backgroundColor: Colors.black,
       appBar: AppBar(
-        backgroundColor: Colors.grey.shade900,
+        backgroundColor: Colors.black,
         title: Padding(
           padding: const EdgeInsets.all(12.0),
           child: Row(
@@ -411,13 +411,13 @@ class _ProPlayersScreenBodyState extends State<_ProPlayersScreenBody> {
                     final player = widget.proPlayers.firstWhereOrNull(
                         (proPlayer) => proPlayer.puuid == protagonist?.puuid);
                     return Container(
-                      margin: EdgeInsets.all(8),
+                      margin: EdgeInsets.all(20),
                       padding: EdgeInsets.all(8),
                       height: 510,
                       width: MediaQuery.of(context).size.width -
                           16, // Asegúrate de que el ancho esté acotado
                       decoration: BoxDecoration(
-                        color: Colors.black.withOpacity(0.6),
+                        color: Colors.grey.shade500.withOpacity(0.1),
                         borderRadius: BorderRadius.circular(40),
                       ),
                       child: protagonist == null
