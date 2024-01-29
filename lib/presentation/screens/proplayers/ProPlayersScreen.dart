@@ -7,7 +7,6 @@ import 'package:tftapp/infrastructure/models/match_info_model.dart';
 import 'package:tftapp/infrastructure/models/trait_info_model.dart';
 import 'package:tftapp/infrastructure/models/unit_info_model.dart';
 import 'package:tftapp/presentation/providers/challengers_provider.dart';
-import 'package:tftapp/presentation/providers/matchs_providers.dart';
 
 class ChallengersScreen extends ConsumerStatefulWidget {
   const ChallengersScreen({Key? key}) : super(key: key);
@@ -25,8 +24,8 @@ class _ChallengersScreenState extends ConsumerState<ChallengersScreen> {
   List<MatchInfoModel> matches = [];
   bool isLoading = false;
   String errorMessage = '';
-  String summonerPuuid =
-      ''; // Añade un nuevo campo de estado para almacenar el PUUID
+  Map<String, String> _playerNamesToPuuids = {};
+
 
   Widget buildAugmentsInfoSearch(List<String> augments) {
     return Container(
@@ -275,10 +274,23 @@ class _ChallengersScreenState extends ConsumerState<ChallengersScreen> {
   }
 
 // Este widget construirá cada tarjeta de partido
-  Widget buildMatchTileSearch(MatchInfoModel match) {
-    final protagonist = match.participants.firstWhereOrNull(
-      (p) => p.puuid == summonerPuuid,
+  Widget buildMatchTileSearch(MatchInfoModel match, String playerName) {
+     // Busca el PUUID basado en el nombre del jugador.
+  final String? summonerPuuid = _playerNamesToPuuids[playerName];
+  
+  // Si no se encuentra el PUUID, maneja el caso de error.
+  if (summonerPuuid == null || summonerPuuid.isEmpty) {
+    print("Error: PUUID not found for $playerName");
+    return ListTile(
+      title: Text('Match ID: ${match.matchId}'),
+      subtitle: Text('Protagonist with name $playerName not found'),
     );
+  }
+  
+  // Continúa con la lógica existente si se encuentra el PUUID.
+  final protagonist = match.participants.firstWhereOrNull(
+    (p) => p.puuid == summonerPuuid,
+  );
     final formattedTimeAgo = formatTimeAgo(match.gameDatetime);
 
     if (protagonist == null) {
@@ -370,32 +382,34 @@ class _ChallengersScreenState extends ConsumerState<ChallengersScreen> {
     }
   }
 
-@override
-void initState() {
-  super.initState();
-  WidgetsBinding.instance.addPostFrameCallback((_) async {
-    final selectedServer = ref.read(selectedServerProviderchallengers.state).state;
-    try {
-      final playerNames = await ref.read(challengerPlayerNamesProvider(selectedServer).future);
-      print("Player names: $playerNames");
-      if (playerNames.isNotEmpty) {
-        await _fetchPlayersMatches(playerNames, selectedServer);
-      } else {
-        print("Player names list is empty");
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
+      final selectedServer =
+          ref.read(selectedServerProviderchallengers.state).state;
+      try {
+        final playerNames = await ref
+            .read(challengerPlayerNamesProvider(selectedServer).future);
+        print("Player names: $playerNames");
+        if (playerNames.isNotEmpty) {
+          await _fetchPlayersMatches(playerNames, selectedServer);
+        } else {
+          print("Player names list is empty");
+          setState(() {
+            _isLoading = false;
+            _errorMessage = "No player names were found.";
+          });
+        }
+      } catch (e) {
+        print("Error fetching player names: $e");
         setState(() {
           _isLoading = false;
-          _errorMessage = "No player names were found.";
+          _errorMessage = e.toString();
         });
       }
-    } catch (e) {
-      print("Error fetching player names: $e");
-      setState(() {
-        _isLoading = false;
-        _errorMessage = e.toString();
-      });
-    }
-  });
-}
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -419,29 +433,48 @@ void initState() {
       );
     }
 
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('Challenger Players'),
-      ),
-      body: _allMatches.isEmpty
-          ? const Center(child: Text('No matches found.'))
-          : ListView.builder(
-              itemCount: _allMatches.length,
-              itemBuilder: (context, index) {
-                final match = _allMatches[index];
-                return buildMatchTileSearch(match);
-              },
-            ),
-    );
+   return Scaffold(
+  appBar: AppBar(
+    title: const Text('Challenger Players'),
+  ),
+  body: _allMatches.isEmpty
+      ? const Center(child: Text('No matches found.'))
+      : ListView.builder(
+          itemCount: _allMatches.length,
+          itemBuilder: (context, index) {
+            final match = _allMatches[index];
+            String? protagonistName;
+
+            for (var participant in match.participants) {
+              if (_playerNamesToPuuids.containsValue(participant.puuid)) {
+                // Encuentra el nombre del jugador basado en el PUUID
+                protagonistName = _playerNamesToPuuids.entries.firstWhere(
+                  (entry) => entry.value == participant.puuid,
+                  orElse: () => MapEntry('', ''),
+                ).key;
+                break;
+              }
+            }
+
+            // Ahora llama a buildMatchTileSearch con el nombre del jugador
+            return buildMatchTileSearch(match, protagonistName ?? '');
+          },
+        ),
+);
   }
 
   Future<List<MatchInfoModel>> fetchMatchesForPlayer(
-      String summonerName, String server, WidgetRef ref) async {
+      String playerName, String server, WidgetRef ref) async {
     List<MatchInfoModel> fetchedMatches = []; // Inicializa una lista vacía
     try {
       final dataSource = ref.read(tftMatchDataSourceProvider(server));
       final summonerInfo =
-          await dataSource.getSummonerInfoBySummonerName(summonerName, server);
+          await dataSource.getSummonerInfoBySummonerName(playerName, server);
+          _playerNamesToPuuids[playerName] = summonerInfo.puuid;
+    
+
+
+      
       final matchIds = await dataSource.getMatchIdsByPUUID(summonerInfo.puuid);
 
       for (String matchId in matchIds) {
@@ -453,7 +486,7 @@ void initState() {
       if (mounted) {
         // Asegúrate de que el widget está montado antes de llamar a setState
         setState(() {
-          _playerMatches[summonerName] = fetchedMatches;
+          _playerMatches[playerName] = fetchedMatches;
         });
       }
     } catch (e) {
@@ -474,30 +507,48 @@ void initState() {
     _playerMatches.clear();
     _allMatches.clear();
 
-    try {
-      for (var playerName in playerNames) {
-        var matches = await fetchMatchesForPlayer(playerName, server, ref);
-        _playerMatches[playerName] = matches;
+    for (var playerName in playerNames) {
+      try {
+        final dataSource = ref.read(tftMatchDataSourceProvider(server));
+        final summonerInfo =
+            await dataSource.getSummonerInfoBySummonerName(playerName, server);
+
+        // Actualizar el mapa con el PUUID del jugador
+        String puuid = _playerNamesToPuuids.putIfAbsent(playerName, () => summonerInfo.puuid);
+        print('PUUID for $playerName is ${_playerNamesToPuuids[playerName]}');
+
+
+
+        final matchIds =
+            await dataSource.getMatchIdsByPUUID(summonerInfo.puuid);
+        List<MatchInfoModel> matchesForPlayer = [];
+
+        for (String matchId in matchIds) {
+          MatchInfoModel matchDetails =
+              await dataSource.getMatchDetailsById(matchId);
+          matchesForPlayer.add(matchDetails);
+        }
+
+        if (mounted) {
+          setState(() {
+            _playerMatches[playerName] = matchesForPlayer;
+          });
+        }
+      } catch (e) {
+        if (mounted) {
+          setState(() {
+            _errorMessage = e.toString();
+          });
+        }
       }
+    }
 
-      // Combina y ordena todos los partidos
-      _allMatches = _playerMatches.values.expand((x) => x).toList();
-      _allMatches.sort((a, b) => b.gameDatetime.compareTo(a.gameDatetime));
+    _allMatches = _playerMatches.values.expand((x) => x).toList();
+    _allMatches.sort((a, b) => b.gameDatetime.compareTo(a.gameDatetime));
 
-      print(
-          'Loaded matches: $_allMatches'); // Agrega esta línea para imprimir los resultados
-
-      // Actualiza el estado para reflejar los nuevos datos
+    if (mounted) {
       setState(() {
         _isLoading = false;
-        // No es necesario actualizar _errorMessage aquí ya que no hubo error
-      });
-    } catch (e) {
-      print(
-          'Error fetching matches: $e'); // También imprime errores si los hubiere
-      setState(() {
-        _isLoading = false;
-        _errorMessage = e.toString();
       });
     }
   }
