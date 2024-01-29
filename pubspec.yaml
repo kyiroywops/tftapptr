@@ -48,6 +48,7 @@ flutter:
     - assets/tft-augment/
     - assets/tft-regalia/
     - assets/tft-trait/
+    - assets/images/
 
   fonts:
     - family: ReadexPro

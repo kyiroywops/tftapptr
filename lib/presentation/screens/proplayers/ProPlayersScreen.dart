@@ -277,6 +277,29 @@ class _ChallengersScreenState extends ConsumerState<ChallengersScreen> {
   Widget buildMatchTileSearch(MatchInfoModel match, String playerName) {
      // Busca el PUUID basado en el nombre del jugador.
   final String? summonerPuuid = _playerNamesToPuuids[playerName];
+
+  Color getColorForPlacement(int placement) {
+  switch (placement) {
+    case 1:
+      return Color(0xFFFFD700); // Oro
+    case 2:
+      return Color(0xFFC0C0C0); // Plata
+    case 3:
+      return Color(0xFFCD7F32); // Bronce
+    case 4:
+      return Color(0xFFADD8E6); // Azul claro
+    case 5:
+      return Color(0xFF32CD32); // Verde
+    case 6:
+      return Color(0xFFFFFF00); // Amarillo
+    case 7:
+      return Color(0xFFFFA500); // Naranja
+    default:
+      return Color(0xFFFF0000); // Rojo
+  }
+
+}
+
   
   // Si no se encuentra el PUUID, maneja el caso de error.
   if (summonerPuuid == null || summonerPuuid.isEmpty) {
@@ -294,12 +317,15 @@ class _ChallengersScreenState extends ConsumerState<ChallengersScreen> {
     final formattedTimeAgo = formatTimeAgo(match.gameDatetime);
 
     if (protagonist == null) {
+      
       return ListTile(
         title: Text('Match ID: ${match.matchId}'),
         subtitle: Text('Protagonist not found'),
       );
     } else {
-      return Container(
+      Color placementColor = getColorForPlacement(protagonist.placement);
+
+       return Container(
         margin: EdgeInsets.all(8),
         padding: EdgeInsets.all(8),
         height: 500,
@@ -315,35 +341,54 @@ class _ChallengersScreenState extends ConsumerState<ChallengersScreen> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               const SizedBox(height: 2), // Espacio vertical
-              Row(
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 15),
+                child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  const SizedBox(width: 10), // Espacio horizontal
-                  Flexible(
-                    // Usa Flexible aquí
-                    child: Text(
-                      'Played $formattedTimeAgo',
-                      style: const TextStyle(
-                        color: Colors.grey,
-                        fontFamily: 'ReadexPro',
-                        fontWeight: FontWeight.w300,
+                  // Nombre del jugador y logo de Challenger a la izquierda
+                  Row(
+                    children: [
+                      Text(
+                        playerName, // Nombre del jugador
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontFamily: 'ReadexPro',
+                          fontWeight: FontWeight.bold,
+                          fontSize: 17
+
+                        ),
                       ),
+                      SizedBox(width: 20), // Espacio entre el texto y la imagen
+                      Image.asset(
+                        'assets/images/challenger.png', // Ruta a la imagen de Challenger
+                        width: 70, // Ajusta el tamaño según tus necesidades
+                        height: 70,
+                      ),
+                    ],
+                  ),
+                  // Tiempo transcurrido desde la partida
+                  Text(
+                    'Played $formattedTimeAgo',
+                    style: TextStyle(
+                      color: Colors.grey,
+                      fontFamily: 'ReadexPro',
+                      fontWeight: FontWeight.w300,
                     ),
                   ),
-
-                  const SizedBox(height: 8),
                 ],
+                            ),
               ),
-              const SizedBox(height: 8),
+
               Padding(
                 padding: const EdgeInsets.only(left: 10),
                 child: Text(
                   '${protagonist.placement.toString()}st Place',
-                  style: const TextStyle(
-                    color: Colors.grey,
+                  style:  TextStyle(
+                    color: placementColor.withOpacity(0.9),
                     fontSize: 30,
                     fontFamily: 'ReadexPro',
-                    fontWeight: FontWeight.bold,
+                    fontWeight: FontWeight.w800,
                   ),
                 ),
               ),
@@ -414,10 +459,36 @@ class _ChallengersScreenState extends ConsumerState<ChallengersScreen> {
   @override
   Widget build(BuildContext context) {
     if (_isLoading) {
-      return Scaffold(
-        appBar: AppBar(
-          title: const Text('Challenger Players'),
+     return Scaffold(
+      backgroundColor: Colors.black,
+      appBar: AppBar(
+        backgroundColor: Colors.black,
+        title: Padding(
+          padding: const EdgeInsets.all(12.0),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Image.asset(
+                'assets/icons/logo.png', // Reemplaza con el camino a tu logo
+                height: 30.0,
+              ),
+              Text(
+                'ProPlayers Realtime',
+                style: TextStyle(
+                  color: Colors.white,
+                  fontFamily: 'ReadexPro',
+                  fontWeight: FontWeight.bold,
+                  fontSize: 15,
+                ),
+              ),
+              Icon(
+                Icons.discord, // Ícono de Discord
+                color: Colors.white,
+              ),
+            ],
+          ),
         ),
+      ),
         body: const Center(
           child: CircularProgressIndicator(),
         ),
@@ -433,10 +504,36 @@ class _ChallengersScreenState extends ConsumerState<ChallengersScreen> {
       );
     }
 
-   return Scaffold(
-  appBar: AppBar(
-    title: const Text('Challenger Players'),
-  ),
+    return Scaffold(
+      backgroundColor: Colors.black,
+      appBar: AppBar(
+        backgroundColor: Colors.black,
+        title: Padding(
+          padding: const EdgeInsets.all(12.0),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Image.asset(
+                'assets/icons/logo.png', // Reemplaza con el camino a tu logo
+                height: 30.0,
+              ),
+              Text(
+                'ProPlayers Realtime',
+                style: TextStyle(
+                  color: Colors.white,
+                  fontFamily: 'ReadexPro',
+                  fontWeight: FontWeight.bold,
+                  fontSize: 15,
+                ),
+              ),
+              Icon(
+                Icons.discord, // Ícono de Discord
+                color: Colors.white,
+              ),
+            ],
+          ),
+        ),
+      ),
   body: _allMatches.isEmpty
       ? const Center(child: Text('No matches found.'))
       : ListView.builder(
@@ -514,7 +611,7 @@ class _ChallengersScreenState extends ConsumerState<ChallengersScreen> {
             await dataSource.getSummonerInfoBySummonerName(playerName, server);
 
         // Actualizar el mapa con el PUUID del jugador
-        String puuid = _playerNamesToPuuids.putIfAbsent(playerName, () => summonerInfo.puuid);
+        _playerNamesToPuuids.putIfAbsent(playerName, () => summonerInfo.puuid);
         print('PUUID for $playerName is ${_playerNamesToPuuids[playerName]}');
 
 
