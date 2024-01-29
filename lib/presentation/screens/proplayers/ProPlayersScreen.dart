@@ -370,21 +370,32 @@ class _ChallengersScreenState extends ConsumerState<ChallengersScreen> {
     }
   }
 
-  @override
-  void initState() {
-    super.initState();
-    // Solo si ya tienes los nombres de jugadores y el servidor disponibles en este punto,
-    // de lo contrario, podrías necesitar usar un FutureBuilder o similar.
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      final selectedServer =
-          ref.read(selectedServerProviderchallengers.state).state;
-      ref
-          .read(challengerPlayerNamesProvider(selectedServer))
-          .whenData((playerNames) {
-        _fetchPlayersMatches(playerNames, selectedServer);
+@override
+void initState() {
+  super.initState();
+  WidgetsBinding.instance.addPostFrameCallback((_) async {
+    final selectedServer = ref.read(selectedServerProviderchallengers.state).state;
+    try {
+      final playerNames = await ref.read(challengerPlayerNamesProvider(selectedServer).future);
+      print("Player names: $playerNames");
+      if (playerNames.isNotEmpty) {
+        await _fetchPlayersMatches(playerNames, selectedServer);
+      } else {
+        print("Player names list is empty");
+        setState(() {
+          _isLoading = false;
+          _errorMessage = "No player names were found.";
+        });
+      }
+    } catch (e) {
+      print("Error fetching player names: $e");
+      setState(() {
+        _isLoading = false;
+        _errorMessage = e.toString();
       });
-    });
-  }
+    }
+  });
+}
 
   @override
   Widget build(BuildContext context) {
