@@ -10,7 +10,7 @@ import 'package:tftapp/infrastructure/models/trait_info_model.dart';
 import 'package:tftapp/presentation/providers/proplayers_providers.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-class ProPlayersScreen extends ConsumerWidget {
+class StreamPlayers extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final proPlayersAsyncValue = ref.watch(proPlayersStreamProvider);
@@ -46,7 +46,7 @@ class ProPlayersScreen extends ConsumerWidget {
         ),
       ),
       body: proPlayersAsyncValue.when(
-        data: (proPlayers) => _ProPlayersScreenBody(proPlayers: proPlayers),
+        data: (proPlayers) => _StreamPlayersBody(proPlayers: proPlayers),
         loading: () => const Center(child: CircularProgressIndicator()),
         error: (error, stack) => Center(child: Text('Error: $error')),
       ),
@@ -340,17 +340,17 @@ Widget buildAvatarWithNameAndItems(
   );
 }
 
-class _ProPlayersScreenBody extends StatefulWidget {
+class _StreamPlayersBody extends StatefulWidget {
   final List<ProPlayer> proPlayers;
 
-  const _ProPlayersScreenBody({Key? key, required this.proPlayers})
+  const _StreamPlayersBody({Key? key, required this.proPlayers})
       : super(key: key);
 
   @override
-  _ProPlayersScreenBodyState createState() => _ProPlayersScreenBodyState();
+  _StreamPlayersBodyState createState() => _StreamPlayersBodyState();
 }
 
-class _ProPlayersScreenBodyState extends State<_ProPlayersScreenBody> {
+class _StreamPlayersBodyState extends State<_StreamPlayersBody> {
   Map<String, List<MatchInfoModel>> _playerMatches = {};
   List<MatchInfoModel> _allMatches =
       []; // Lista combinada de todos los partidos

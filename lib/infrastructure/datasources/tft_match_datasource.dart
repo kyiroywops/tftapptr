@@ -1,4 +1,5 @@
 import 'package:dio/dio.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:tftapp/config/constants/environment.dart';
 import 'package:tftapp/infrastructure/models/match_info_model.dart';
 import 'package:tftapp/infrastructure/models/summonername_info_model.dart';
@@ -82,6 +83,27 @@ class TFTMatchDataSource {
     }
   }
 
+ Future<List<SummonerInfoModel>> getChallengerPlayers(String region, {int count = 2}) async {
+    try {
+      final response = await _dio.get('https://$region.api.riotgames.com/tft/league/v1/challenger');
+      if (response.statusCode == 200) {
+        List<dynamic> entries = response.data['entries'];
+        // Aquí limitamos la lista a 'count' elementos.
+        return Future.wait(entries.take(count).map((entry) async {
+          // Utilizamos el 'summonerId' para obtener la información del invocador.
+          return await getSummonerInfoBySummonerName(entry['summonerName'], region);
+        }).toList());
+      } else {
+        print('Error fetching challenger players: ${response.statusCode} - ${response.data}');
+        throw Exception('Failed to fetch challenger players');
+      }
+    } on DioException catch (e) {
+      print('Error fetching challenger players: $e');
+      throw Exception('Error fetching challenger players: $e');
+    }
+  }
+
+
   Future<MatchInfoModel> getMatchDetailsById(String matchId,
       {int retryCount = 0}) async {
     print('Fetching details for match: $matchId');
@@ -112,3 +134,7 @@ Future<SummonerInfoModel> getSummonerInfoBySummonerName(
 }
 
 }
+
+final tftMatchDataSourceProvider = Provider.family<TFTMatchDataSource, String>((ref, region) {
+  return TFTMatchDataSource(region);
+});

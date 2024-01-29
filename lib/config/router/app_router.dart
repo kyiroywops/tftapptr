@@ -4,6 +4,7 @@ import 'package:tftapp/presentation/screens/proplayers/CompositionsTrendingScree
 import 'package:tftapp/presentation/screens/proplayers/PatchNotesScreen.dart';
 import 'package:tftapp/presentation/screens/proplayers/ProPlayersScreen.dart';
 import 'package:tftapp/presentation/screens/proplayers/SearchPlayersScreen.dart';
+import 'package:tftapp/presentation/screens/proplayers/StreamPlayers.dart';
 
 final appRouter = GoRouter(
   initialLocation: '/',
@@ -14,7 +15,7 @@ final appRouter = GoRouter(
     ),
     GoRoute(
       path: '/pro_players',
-      builder: (context, state) => ProPlayersScreen(),
+      builder: (context, state) => ChallengersScreen(),
     ),
     GoRoute(
       path: '/patch_notes',
@@ -27,6 +28,10 @@ final appRouter = GoRouter(
     GoRoute(
       path: '/compositions',
       builder: (context, state) => CompositionsScreen(),
+    ),
+     GoRoute(
+      path: '/streamplayers',
+      builder: (context, state) => StreamPlayers(),
     ),
   ],
 );
